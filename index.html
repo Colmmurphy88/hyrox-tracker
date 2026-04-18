@@ -546,6 +546,114 @@ const REAL_WEEKS = [
       { day: "Fri", title: "Light Hyrox skills",    detail: "35 min, station technique only — wall ball form, ski erg efficiency, sled push posture." },
     ],
   },
+
+  // -------- Phase 3 — Intensity & Specificity --------
+  {
+    week: 15, phaseId: 3, label: "Week 15",
+    sessions: [
+      { day: "Mon",   title: "Strength maintain not build",          detail: "Deadlifts 4×5, squats 4×6, bench 3×8, pull-ups 3×max — weights stay high but volume reduces." },
+      { day: "Tue",   title: "Speed 1km repeats at 3:50",            detail: "7×1km targeting 3:50/km, 90 sec rest — this should now feel like your new normal pace." },
+      { day: "Fri",   title: "Full Hyrox simulation — doubles",      detail: "8km total running, all 8 stations, split effort as you would with your partner, time yourself." },
+      { day: "Bonus", title: "Zone 2 run (optional)",                detail: "65 min easy." },
+    ],
+  },
+  {
+    week: 16, phaseId: 3, label: "Week 16",
+    sessions: [
+      { day: "Mon",   title: "Strength maintain",              detail: "Squats 4×6, Romanian deadlifts 4×8, bench 3×8, sled push 4×20m, farmer carry." },
+      { day: "Tue",   title: "Speed 3km tempo",                detail: "2×3km at 4:10/km, 3 min rest — sustained race pace effort, focus on breathing pattern." },
+      { day: "Fri",   title: "Race simulation — full & timed", detail: "Complete doubles format, record splits per km and per station." },
+      { day: "Bonus", title: "Zone 2 run (optional)",          detail: "70 min easy." },
+    ],
+  },
+  {
+    week: 17, phaseId: 3, label: "Week 17",
+    sessions: [
+      { day: "Mon",   title: "Strength maintain",              detail: "Deadlifts 4×5, box jumps 3×6, bench 3×8, rows 3×10." },
+      { day: "Tue",   title: "Speed 1km sub 3:50 push",        detail: "8×1km at 3:48–3:50/km, 90 sec rest — this is a hard session." },
+      { day: "Fri",   title: "Race simulation — pre-fatigued", detail: "20 min heavy station work then full 8km and 8 stations." },
+      { day: "Bonus", title: "Zone 2 run (optional)",          detail: "70 min easy." },
+    ],
+  },
+  {
+    week: 18, phaseId: 3, label: "Week 18 — Deload & Benchmark",
+    sessions: [
+      { day: "Mon", title: "Strength reduced",     detail: "3 sets per exercise, moderate weight, no new PBs this week." },
+      { day: "Tue", title: "1km time trial",       detail: "Full warm up then one all-out 1km — this is your Phase 3 benchmark, compare to Week 10." },
+      { day: "Fri", title: "Light Hyrox skills",   detail: "40 min technique and efficiency focus, no racing the clock." },
+    ],
+  },
+  {
+    week: 19, phaseId: 3, label: "Week 19",
+    sessions: [
+      { day: "Mon",   title: "Strength maintain",               detail: "Deadlifts 4×5, squats 4×6, bench 3×8, pull-ups 3×max, sandbag lunges 3×10." },
+      { day: "Tue",   title: "Speed race pace ladder",          detail: "500m at 3:40 → 1km at 3:50 → 2km at 4:00 → 1km at 3:50 → 500m at 3:40, full rest between." },
+      { day: "Fri",   title: "Full race simulation — timed",    detail: "Full doubles format, target a personal best simulation time." },
+      { day: "Bonus", title: "Zone 2 run (optional)",           detail: "70 min easy." },
+    ],
+  },
+  {
+    week: 20, phaseId: 3, label: "Week 20",
+    sessions: [
+      { day: "Mon",   title: "Strength maintain",                     detail: "Same as Week 19: deadlifts 4×5, squats 4×6, bench 3×8, pull-ups 3×max, sandbag lunges 3×10." },
+      { day: "Tue",   title: "Speed 2km repeats",                     detail: "4×2km at 4:00/km, 2 min rest — sustained race pace for longer than race distance." },
+      { day: "Fri",   title: "Race simulation — station efficiency",  detail: "Full format focusing on clean handoffs and minimising dead time." },
+      { day: "Bonus", title: "Zone 2 run (optional)",                 detail: "70 min easy." },
+    ],
+  },
+
+  // -------- Phase 4 — Sharpening & Taper --------
+  {
+    week: 21, phaseId: 4, label: "Week 21",
+    sessions: [
+      { day: "Mon",   title: "Strength reduce volume further",         detail: "Deadlifts 3×4, squats 3×5, bench 3×6 — maintain intensity but trim sets." },
+      { day: "Tue",   title: "Speed race pace sharpening",             detail: "6×1km at race target pace, full 2 min rest, fast but controlled." },
+      { day: "Fri",   title: "Race simulation — quality over volume",  detail: "Full doubles format, push harder on running legs — beat your Week 19 simulation time." },
+      { day: "Bonus", title: "Zone 2 run (optional)",                  detail: "60 min easy." },
+    ],
+  },
+  {
+    week: 22, phaseId: 4, label: "Week 22",
+    sessions: [
+      { day: "Mon",   title: "Strength maintain pattern",     detail: "Same as Week 21: deadlifts 3×4, squats 3×5, bench 3×6." },
+      { day: "Tue",   title: "Speed 500m repeats",            detail: "10×500m at 3:40/km, 60 sec rest — short, fast, sharp; top-end speed maintenance." },
+      { day: "Fri",   title: "Race simulation — half format", detail: "4km and 4 stations only, higher intensity than full format." },
+      { day: "Bonus", title: "Zone 2 run (optional)",         detail: "55 min easy." },
+    ],
+  },
+  {
+    week: 23, phaseId: 4, label: "Week 23 — Taper Begins",
+    sessions: [
+      { day: "Mon", title: "Strength light",         detail: "Deadlifts 3×3, squats 3×4, bench 2×6 — low volume, moderate weight." },
+      { day: "Tue", title: "Speed short and fast",   detail: "6×400m at 3:30/km, full rest between — fast, fresh, sharp." },
+      { day: "Fri", title: "Light race rehearsal",   detail: "2km run and 2 stations repeated twice, race pace only." },
+    ],
+  },
+  {
+    week: 24, phaseId: 4, label: "Week 24",
+    sessions: [
+      { day: "Mon", title: "Strength very light",         detail: "Squats 2×5, deadlifts 2×4, bench 2×5 — just moving weight." },
+      { day: "Tue", title: "Speed 4×1km race pace",       detail: "Full rest between — should feel easy." },
+      { day: "Fri", title: "Easy movement session",       detail: "30 min light run and station technique work, no intensity." },
+    ],
+  },
+  {
+    week: 25, phaseId: 4, label: "Week 25 — Race Week Prep",
+    sessions: [
+      { day: "Mon", title: "Very light movement",     detail: "20 min easy jog, bodyweight squats and lunges only." },
+      { day: "Tue", title: "Race preview run",        detail: "2×1km at race pace, full rest — then done." },
+      { day: "Fri", title: "Rest or very easy walk",  detail: "Full rest if race is Sunday; light 20 min walk only if Saturday." },
+    ],
+  },
+  {
+    week: 26, phaseId: 4, label: "Week 26 — Race Week",
+    sessions: [
+      { day: "Mon",     title: "Rest",                            detail: "Full rest. Hydrate well, eat well, visualise your race, trust 26 weeks of work." },
+      { day: "Tue",     title: "Very light shakeout",             detail: "20 min easy jog only, a few strides at race pace, nothing more." },
+      { day: "Fri",     title: "Race day prep",                   detail: "Rest Friday. Check gear, confirm race plan with partner." },
+      { day: "Race",    title: "Hyrox Doubles Dublin",            detail: "Target sub-55 minutes. Run your race, trust your partner, enjoy it." },
+    ],
+  },
 ];
 
 function buildPlan() {
