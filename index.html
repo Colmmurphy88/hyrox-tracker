@@ -3,43 +3,39 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0f172a" />
+<meta name="theme-color" content="#0a0a0a" />
 <title>Hyrox 26-Week Tracker</title>
 <style>
   :root {
-    --bg: #0f172a;
-    --surface: #1e293b;
-    --surface-2: #334155;
-    --text: #f1f5f9;
-    --muted: #94a3b8;
-    --border: #334155;
-    --done: #64748b;
+    --bg: #0a0a0a;
+    --surface: #1a1a1a;
+    --surface-2: #262626;
+    --text: #e0e0e0;
+    --muted: #888888;
+    --border: #2a2a2a;
+    --done: #555555;
 
-    --p1: #3b82f6;
-    --p1-soft: rgba(59, 130, 246, 0.12);
-    --p2: #22c55e;
-    --p2-soft: rgba(34, 197, 94, 0.12);
-    --p3: #f59e0b;
-    --p3-soft: rgba(245, 158, 11, 0.12);
-    --p4: #ef4444;
-    --p4-soft: rgba(239, 68, 68, 0.12);
+    --accent: #F5C400;
+    --accent-soft: rgba(245, 196, 0, 0.10);
+    --accent-strong: #FFD700;
+    --on-accent: #0a0a0a;
+
+    /* All phases use the unified Hyrox accent. */
+    --p1: var(--accent);
+    --p1-soft: var(--accent-soft);
+    --p2: var(--accent);
+    --p2-soft: var(--accent-soft);
+    --p3: var(--accent);
+    --p3-soft: var(--accent-soft);
+    --p4: var(--accent);
+    --p4-soft: var(--accent-soft);
 
     --radius: 12px;
     --radius-sm: 8px;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
   }
 
-  @media (prefers-color-scheme: light) {
-    :root {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --surface-2: #f1f5f9;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --done: #94a3b8;
-    }
-  }
+  ::selection { background: var(--accent); color: var(--on-accent); }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -64,23 +60,28 @@
     position: sticky;
     top: 0;
     background: var(--bg);
-    padding: 12px 0 10px;
+    padding: 14px 0 12px;
     z-index: 10;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 18px;
+    border-bottom: 2px solid var(--accent);
+    margin-bottom: 20px;
   }
 
   h1 {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0 0 10px;
-    letter-spacing: -0.01em;
+    font-size: 22px;
+    font-weight: 900;
+    margin: 0 0 8px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--accent);
   }
 
   .subtitle {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--muted);
-    margin: 0 0 12px;
+    margin: 0 0 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
   }
 
   /* Progress bar */
@@ -91,9 +92,12 @@
     margin-bottom: 2px;
   }
   .progress-label {
-    font-size: 12px;
+    font-size: 10px;
     color: var(--muted);
     min-width: 62px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
   }
   .progress-bar {
     flex: 1;
@@ -101,20 +105,21 @@
     height: 8px;
     border-radius: 999px;
     overflow: hidden;
+    border: 1px solid var(--border);
   }
   .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--p1), var(--p2), var(--p3), var(--p4));
+    background: var(--accent);
     width: 0%;
     transition: width 0.3s ease;
   }
   .progress-pct {
-    font-size: 12px;
+    font-size: 13px;
     font-variant-numeric: tabular-nums;
-    color: var(--text);
-    min-width: 38px;
+    color: var(--accent);
+    min-width: 40px;
     text-align: right;
-    font-weight: 600;
+    font-weight: 800;
   }
 
   /* Phase groups */
@@ -132,17 +137,21 @@
     background: var(--phase-soft, var(--surface));
   }
   .phase-title {
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 800;
     flex: 1;
     min-width: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
   }
   .phase-title small {
     display: block;
-    font-size: 11px;
-    font-weight: 500;
+    font-size: 10px;
+    font-weight: 600;
     color: var(--muted);
     margin-top: 2px;
+    letter-spacing: 0.06em;
   }
   .phase-progress {
     display: flex;
@@ -155,14 +164,15 @@
     height: 6px;
   }
   .phase-progress .progress-fill {
-    background: var(--phase-color, var(--p1));
+    background: var(--accent);
   }
   .phase-pct {
     font-size: 11px;
     font-variant-numeric: tabular-nums;
-    color: var(--muted);
+    color: var(--accent);
     min-width: 32px;
     text-align: right;
+    font-weight: 700;
   }
 
   /* Week card */
@@ -173,11 +183,12 @@
     margin-bottom: 10px;
     overflow: hidden;
     box-shadow: var(--shadow);
-    border-left: 3px solid var(--phase-color, var(--border));
   }
   .week.current {
-    outline: 2px solid var(--phase-color, var(--p1));
+    border-color: var(--accent);
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
+    box-shadow: 0 0 0 0 transparent, 0 0 24px rgba(245, 196, 0, 0.18);
   }
 
   .week-header {
@@ -205,43 +216,39 @@
   .week.open .week-chev { transform: rotate(90deg); }
   .week-title {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 800;
     flex: 1;
     min-width: 0;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
   }
   .week-title small {
     display: block;
     color: var(--muted);
-    font-weight: 400;
-    font-size: 11px;
-    margin-top: 1px;
-  }
-  .week-badge {
+    font-weight: 600;
     font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 999px;
-    background: var(--phase-color, var(--p1));
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    flex-shrink: 0;
+    margin-top: 1px;
+    letter-spacing: 0.08em;
   }
+  .week-badge,
   .week-now {
     font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
+    font-weight: 800;
+    padding: 3px 10px;
     border-radius: 999px;
-    background: var(--text);
-    color: var(--bg);
+    background: var(--accent);
+    color: var(--on-accent);
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
   }
   .week-count {
     font-size: 11px;
     color: var(--muted);
     font-variant-numeric: tabular-nums;
     flex-shrink: 0;
+    font-weight: 700;
   }
 
   .week-body {
@@ -273,21 +280,22 @@
 
   .session-main { flex: 1; min-width: 0; }
   .session-day {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--muted);
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--accent);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.12em;
   }
   .session-title {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     margin: 2px 0 2px;
+    color: var(--text);
   }
   .session-detail {
     font-size: 13px;
-    color: var(--muted);
-    line-height: 1.45;
+    color: var(--text);
+    line-height: 1.5;
   }
 
   /* Structured session blocks: mobility + coach note + alt session */
@@ -301,19 +309,20 @@
   }
   .session-block strong {
     display: block;
-    font-size: 10px;
+    font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.12em;
     margin-bottom: 3px;
-    font-weight: 700;
-    color: var(--muted);
+    font-weight: 800;
+    color: var(--accent);
   }
   .session-mobility {
     background: var(--surface-2);
+    border-left: 2px solid var(--border);
   }
   .session-coach {
-    background: var(--phase-soft, var(--surface-2));
-    border-left: 3px solid var(--phase-color, var(--border));
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
   }
 
   .session-alt {
@@ -381,35 +390,36 @@
   /* Time trial */
   .time-trial {
     margin-top: 10px;
-    padding: 10px 12px;
-    background: var(--phase-soft, var(--surface-2));
+    padding: 12px;
+    background: var(--accent-soft);
     border-radius: var(--radius-sm);
-    border: 1px dashed var(--phase-color, var(--border));
+    border: 1px dashed var(--accent);
   }
   .time-trial-label {
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 10px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--phase-color, var(--text));
+    letter-spacing: 0.12em;
+    color: var(--accent);
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   .time-trial input {
     font: inherit;
-    font-size: 16px;
+    font-size: 18px;
     font-variant-numeric: tabular-nums;
-    font-weight: 600;
-    padding: 6px 10px;
-    width: 100px;
+    font-weight: 800;
+    padding: 8px 12px;
+    width: 110px;
     text-align: center;
-    background: var(--surface);
-    color: var(--text);
+    background: var(--bg);
+    color: var(--accent);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
+    letter-spacing: 0.06em;
   }
   .time-trial input:focus {
-    outline: 2px solid var(--phase-color, var(--p1));
+    outline: 2px solid var(--accent);
     outline-offset: 1px;
     border-color: transparent;
   }
@@ -417,29 +427,35 @@
   /* Reset button */
   .footer-actions {
     text-align: center;
-    margin-top: 24px;
+    margin-top: 32px;
   }
   .btn-reset {
     font: inherit;
-    font-size: 12px;
+    font-size: 11px;
     color: var(--muted);
     background: transparent;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 6px 14px;
+    padding: 8px 18px;
     cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
   }
-  .btn-reset:hover { color: var(--text); }
+  .btn-reset:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
 
-  /* Phase color classes */
-  .phase-1 { --phase-color: var(--p1); --phase-soft: var(--p1-soft); }
-  .phase-2 { --phase-color: var(--p2); --phase-soft: var(--p2-soft); }
-  .phase-3 { --phase-color: var(--p3); --phase-soft: var(--p3-soft); }
-  .phase-4 { --phase-color: var(--p4); --phase-soft: var(--p4-soft); }
+  /* Phase classes carry no colour — Hyrox brand uses unified yellow accent */
+  .phase-1, .phase-2, .phase-3, .phase-4 {
+    --phase-color: var(--accent);
+    --phase-soft: var(--accent-soft);
+  }
 
   @media (min-width: 560px) {
     .container { padding: 20px 20px 60px; }
-    h1 { font-size: 24px; }
+    h1 { font-size: 26px; }
     .week-title { font-size: 15px; }
   }
 </style>
