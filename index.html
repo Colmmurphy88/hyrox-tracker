@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0f172a" />
+<title>Hyrox 26-Week Tracker</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface-2: #334155;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #334155;
+    --done: #64748b;
+
+    --p1: #3b82f6;
+    --p1-soft: rgba(59, 130, 246, 0.12);
+    --p2: #22c55e;
+    --p2-soft: rgba(34, 197, 94, 0.12);
+    --p3: #f59e0b;
+    --p3-soft: rgba(245, 158, 11, 0.12);
+    --p4: #ef4444;
+    --p4-soft: rgba(239, 68, 68, 0.12);
+
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-2: #f1f5f9;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --done: #94a3b8;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right)
+             env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 16px 14px 48px;
+  }
+
+  header.app-header {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding: 12px 0 10px;
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 12px;
+  }
+
+  /* Progress bar */
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2px;
+  }
+  .progress-label {
+    font-size: 12px;
+    color: var(--muted);
+    min-width: 62px;
+  }
+  .progress-bar {
+    flex: 1;
+    background: var(--surface-2);
+    height: 8px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--p1), var(--p2), var(--p3), var(--p4));
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .progress-pct {
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    min-width: 38px;
+    text-align: right;
+    font-weight: 600;
+  }
+
+  /* Phase groups */
+  .phase {
+    margin-bottom: 28px;
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    border-left: 4px solid var(--phase-color, var(--border));
+    background: var(--phase-soft, var(--surface));
+  }
+  .phase-title {
+    font-size: 15px;
+    font-weight: 700;
+    flex: 1;
+    min-width: 0;
+  }
+  .phase-title small {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .phase-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .phase-progress .progress-bar {
+    width: 70px;
+    height: 6px;
+  }
+  .phase-progress .progress-fill {
+    background: var(--phase-color, var(--p1));
+  }
+  .phase-pct {
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+    min-width: 32px;
+    text-align: right;
+  }
+
+  /* Week card */
+  .week {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border-left: 3px solid var(--phase-color, var(--border));
+  }
+  .week.current {
+    outline: 2px solid var(--phase-color, var(--p1));
+    outline-offset: 2px;
+  }
+
+  .week-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    user-select: none;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+  }
+  .week-header:hover { background: var(--surface-2); }
+  .week-chev {
+    font-size: 12px;
+    color: var(--muted);
+    transition: transform 0.2s;
+    width: 12px;
+    flex-shrink: 0;
+  }
+  .week.open .week-chev { transform: rotate(90deg); }
+  .week-title {
+    font-size: 14px;
+    font-weight: 600;
+    flex: 1;
+    min-width: 0;
+  }
+  .week-title small {
+    display: block;
+    color: var(--muted);
+    font-weight: 400;
+    font-size: 11px;
+    margin-top: 1px;
+  }
+  .week-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--phase-color, var(--p1));
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+  }
+  .week-now {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--text);
+    color: var(--bg);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .week-count {
+    font-size: 11px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+
+  .week-body {
+    display: none;
+    padding: 4px 14px 14px;
+    border-top: 1px solid var(--border);
+  }
+  .week.open .week-body { display: block; }
+
+  /* Session */
+  .session {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .session:last-child { border-bottom: 0; }
+
+  .session-check {
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .session-check input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--phase-color, var(--p1));
+    cursor: pointer;
+  }
+
+  .session-main { flex: 1; min-width: 0; }
+  .session-day {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .session-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 2px 0 2px;
+  }
+  .session-detail {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .session-notes {
+    margin-top: 8px;
+    width: 100%;
+    min-height: 34px;
+    resize: vertical;
+    padding: 6px 8px;
+    font: inherit;
+    font-size: 12px;
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .session-notes:focus {
+    outline: 2px solid var(--phase-color, var(--p1));
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+
+  .session.done .session-title,
+  .session.done .session-detail {
+    color: var(--done);
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+  }
+
+  /* Time trial */
+  .time-trial {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: var(--phase-soft, var(--surface-2));
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--phase-color, var(--border));
+  }
+  .time-trial-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--phase-color, var(--text));
+    display: block;
+    margin-bottom: 6px;
+  }
+  .time-trial input {
+    font: inherit;
+    font-size: 16px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    padding: 6px 10px;
+    width: 100px;
+    text-align: center;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .time-trial input:focus {
+    outline: 2px solid var(--phase-color, var(--p1));
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+
+  /* Reset button */
+  .footer-actions {
+    text-align: center;
+    margin-top: 24px;
+  }
+  .btn-reset {
+    font: inherit;
+    font-size: 12px;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 14px;
+    cursor: pointer;
+  }
+  .btn-reset:hover { color: var(--text); }
+
+  /* Phase color classes */
+  .phase-1 { --phase-color: var(--p1); --phase-soft: var(--p1-soft); }
+  .phase-2 { --phase-color: var(--p2); --phase-soft: var(--p2-soft); }
+  .phase-3 { --phase-color: var(--p3); --phase-soft: var(--p3-soft); }
+  .phase-4 { --phase-color: var(--p4); --phase-soft: var(--p4-soft); }
+
+  @media (min-width: 560px) {
+    .container { padding: 20px 20px 60px; }
+    h1 { font-size: 24px; }
+    .week-title { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="app-header">
+    <h1>Hyrox 26-Week Tracker</h1>
+    <p class="subtitle" id="subtitle">Start 18 Apr 2026 · Hyrox Doubles Dublin</p>
+    <div class="progress">
+      <span class="progress-label">Overall</span>
+      <div class="progress-bar"><div class="progress-fill" id="overallFill"></div></div>
+      <span class="progress-pct" id="overallPct">0%</span>
+    </div>
+  </header>
+
+  <main id="phases"></main>
+
+  <div class="footer-actions">
+    <button class="btn-reset" id="resetBtn" type="button">Reset all data</button>
+  </div>
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   Hyrox 26-Week Tracker — app shell with placeholder data.
+   Real session content will be populated in a later pass.
+--------------------------------------------------------------- */
+
+const START_DATE = new Date(2026, 3, 18); // 18 April 2026 (month is 0-indexed)
+const STORAGE_KEY = "hyrox-tracker-v1";
+
+const PHASES = [
+  { id: 1, name: "Foundation & Speed Mechanics", weeks: [1, 6] },
+  { id: 2, name: "Race Simulation & Threshold",  weeks: [7, 14] },
+  { id: 3, name: "Intensity & Specificity",      weeks: [15, 20] },
+  { id: 4, name: "Sharpening & Taper",           weeks: [21, 26] },
+];
+
+const TIME_TRIAL_WEEKS = new Set([5, 10, 18, 26]);
+
+// Placeholder plan — every week gets 3 generic sessions. Real data swaps in later.
+function buildPlaceholderPlan() {
+  const plan = [];
+  for (let w = 1; w <= 26; w++) {
+    const phase = PHASES.find(p => w >= p.weeks[0] && w <= p.weeks[1]);
+    plan.push({
+      week: w,
+      phaseId: phase.id,
+      label: `Week ${w} — placeholder`,
+      sessions: [
+        { day: "Mon", title: "Session A", detail: "Placeholder detail — strength block." },
+        { day: "Tue", title: "Session B", detail: "Placeholder detail — speed block." },
+        { day: "Fri", title: "Session C", detail: "Placeholder detail — Hyrox / HIIT block." },
+      ],
+    });
+  }
+  return plan;
+}
+
+const PLAN = buildPlaceholderPlan();
+
+// --- storage ---------------------------------------------------
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return { done: {}, notes: {}, tt: {} };
+    const parsed = JSON.parse(raw);
+    return {
+      done: parsed.done || {},
+      notes: parsed.notes || {},
+      tt: parsed.tt || {},
+    };
+  } catch {
+    return { done: {}, notes: {}, tt: {} };
+  }
+}
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+const state = loadState();
+
+// --- current week ----------------------------------------------
+function currentWeekNumber() {
+  const now = new Date();
+  const ms = now - START_DATE;
+  const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+  const w = Math.floor(days / 7) + 1;
+  if (w < 1) return 1;
+  if (w > 26) return 26;
+  return w;
+}
+const CURRENT_WEEK = currentWeekNumber();
+
+// --- keys ------------------------------------------------------
+const sessKey = (w, i) => `w${w}s${i}`;
+const ttKey = w => `tt${w}`;
+
+// --- rendering -------------------------------------------------
+function render() {
+  const root = document.getElementById("phases");
+  root.innerHTML = "";
+
+  for (const phase of PHASES) {
+    const phaseEl = document.createElement("section");
+    phaseEl.className = `phase phase-${phase.id}`;
+
+    const weeksInPhase = PLAN.filter(w => w.phaseId === phase.id);
+    const { done, total } = phaseStats(weeksInPhase);
+    const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+
+    phaseEl.innerHTML = `
+      <div class="phase-header">
+        <div class="phase-title">
+          Phase ${phase.id} — ${phase.name}
+          <small>Weeks ${phase.weeks[0]}–${phase.weeks[1]}</small>
+        </div>
+        <div class="phase-progress">
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+          <span class="phase-pct">${pct}%</span>
+        </div>
+      </div>
+    `;
+
+    for (const week of weeksInPhase) {
+      phaseEl.appendChild(renderWeek(week));
+    }
+    root.appendChild(phaseEl);
+  }
+  updateOverall();
+}
+
+function phaseStats(weeks) {
+  let done = 0, total = 0;
+  for (const w of weeks) {
+    for (let i = 0; i < w.sessions.length; i++) {
+      total++;
+      if (state.done[sessKey(w.week, i)]) done++;
+    }
+  }
+  return { done, total };
+}
+
+function renderWeek(week) {
+  const el = document.createElement("article");
+  el.className = `week phase-${week.phaseId}`;
+  const isCurrent = week.week === CURRENT_WEEK;
+  if (isCurrent) el.classList.add("current", "open");
+
+  const doneCount = week.sessions.filter((_, i) => state.done[sessKey(week.week, i)]).length;
+  const total = week.sessions.length;
+
+  const header = document.createElement("button");
+  header.type = "button";
+  header.className = "week-header";
+  header.innerHTML = `
+    <span class="week-chev">▶</span>
+    <span class="week-title">
+      ${week.label}
+      <small>Phase ${week.phaseId}</small>
+    </span>
+    ${isCurrent ? '<span class="week-now">Now</span>' : ""}
+    <span class="week-count">${doneCount}/${total}</span>
+  `;
+  header.addEventListener("click", () => el.classList.toggle("open"));
+  el.appendChild(header);
+
+  const body = document.createElement("div");
+  body.className = "week-body";
+
+  week.sessions.forEach((s, i) => body.appendChild(renderSession(week.week, i, s)));
+
+  if (TIME_TRIAL_WEEKS.has(week.week)) {
+    body.appendChild(renderTimeTrial(week.week));
+  }
+
+  el.appendChild(body);
+  return el;
+}
+
+function renderSession(week, i, session) {
+  const key = sessKey(week, i);
+  const done = !!state.done[key];
+
+  const wrap = document.createElement("div");
+  wrap.className = "session" + (done ? " done" : "");
+
+  const check = document.createElement("label");
+  check.className = "session-check";
+  const cb = document.createElement("input");
+  cb.type = "checkbox";
+  cb.checked = done;
+  cb.setAttribute("aria-label", `Mark ${session.day} ${session.title} complete`);
+  cb.addEventListener("change", () => {
+    if (cb.checked) state.done[key] = true;
+    else delete state.done[key];
+    saveState();
+    render();
+  });
+  check.appendChild(cb);
+
+  const main = document.createElement("div");
+  main.className = "session-main";
+  main.innerHTML = `
+    <div class="session-day">${session.day}</div>
+    <div class="session-title">${session.title}</div>
+    <div class="session-detail">${session.detail}</div>
+  `;
+
+  const notes = document.createElement("textarea");
+  notes.className = "session-notes";
+  notes.placeholder = "Notes — pace, felt like, fuel, weights…";
+  notes.value = state.notes[key] || "";
+  notes.addEventListener("input", () => {
+    const v = notes.value;
+    if (v) state.notes[key] = v;
+    else delete state.notes[key];
+    saveState();
+  });
+  main.appendChild(notes);
+
+  wrap.appendChild(check);
+  wrap.appendChild(main);
+  return wrap;
+}
+
+function renderTimeTrial(week) {
+  const key = ttKey(week);
+  const wrap = document.createElement("div");
+  wrap.className = "time-trial";
+  wrap.innerHTML = `<span class="time-trial-label">1km time trial</span>`;
+  const input = document.createElement("input");
+  input.type = "text";
+  input.inputMode = "numeric";
+  input.pattern = "[0-9]{1,2}:[0-9]{2}";
+  input.placeholder = "mm:ss";
+  input.maxLength = 5;
+  input.value = state.tt[key] || "";
+  input.addEventListener("input", () => {
+    const v = input.value.trim();
+    if (v) state.tt[key] = v;
+    else delete state.tt[key];
+    saveState();
+  });
+  wrap.appendChild(input);
+  return wrap;
+}
+
+function updateOverall() {
+  let done = 0, total = 0;
+  for (const w of PLAN) {
+    for (let i = 0; i < w.sessions.length; i++) {
+      total++;
+      if (state.done[sessKey(w.week, i)]) done++;
+    }
+  }
+  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+  document.getElementById("overallFill").style.width = pct + "%";
+  document.getElementById("overallPct").textContent = pct + "%";
+}
+
+// --- reset -----------------------------------------------------
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (!confirm("Reset all completed sessions, notes and time trials?")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state.done = {};
+  state.notes = {};
+  state.tt = {};
+  render();
+});
+
+// --- boot ------------------------------------------------------
+render();
+
+// Scroll current week into view on load
+requestAnimationFrame(() => {
+  const cur = document.querySelector(".week.current");
+  if (cur) cur.scrollIntoView({ block: "center", behavior: "instant" in document.documentElement.style ? "instant" : "auto" });
+});
+</script>
+</body>
+</html>
