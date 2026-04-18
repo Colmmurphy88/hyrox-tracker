@@ -418,26 +418,160 @@ const PHASES = [
 
 const TIME_TRIAL_WEEKS = new Set([5, 10, 18, 26]);
 
-// Placeholder plan — every week gets 3 generic sessions. Real data swaps in later.
-function buildPlaceholderPlan() {
+// Real plan data — Phases 1 & 2 populated. Phases 3 & 4 remain placeholder until supplied.
+const REAL_WEEKS = [
+  // -------- Phase 1 — Foundation & Speed Mechanics --------
+  {
+    week: 1, phaseId: 1, label: "Week 1",
+    sessions: [
+      { day: "Mon",   title: "Strength full body baseline", detail: "Squats 4×8, deadlifts 4×6, bench press 3×10, bent-over row 3×10, farmer carry 3×30m." },
+      { day: "Tue",   title: "Speed 600m repeats",          detail: "Warm up 10 min, 6×600m at 3:50/km, 90 sec rest, cool down 10 min." },
+      { day: "Fri",   title: "HIIT Hyrox station work",     detail: "50 min, ski erg, sled push, burpee broad jumps, wall balls, short rest intervals." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "45–50 min easy conversational pace, heart rate 130–145." },
+    ],
+  },
+  {
+    week: 2, phaseId: 1, label: "Week 2",
+    sessions: [
+      { day: "Mon",   title: "Strength lower body focus",   detail: "Squats 4×8, Romanian deadlifts 4×10, walking lunges 3×12, sled push 4×20m heavy." },
+      { day: "Tue",   title: "Speed 600m repeats",          detail: "Warm up 10 min, 7×600m at 3:50/km, 90 sec rest, focus on consistent splits." },
+      { day: "Fri",   title: "HIIT Hyrox station work",     detail: "50 min, row, sandbag lunges, wall balls, ski erg, minimal rest between stations." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "50 min easy, focus on nasal breathing." },
+    ],
+  },
+  {
+    week: 3, phaseId: 1, label: "Week 3",
+    sessions: [
+      { day: "Mon",   title: "Strength full body",          detail: "Deadlifts 4×6 heavier, bench press 4×8, pull-ups 3×max, box jumps 3×8, plank holds." },
+      { day: "Tue",   title: "Speed mixed 400/800m",        detail: "4×400m at 3:40/km then 3×800m at 3:55/km, 2 min rest between each." },
+      { day: "Fri",   title: "HIIT Hyrox station work",     detail: "50 min, add 200m run between each station block to simulate race structure." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "55 min easy, keep it genuinely easy." },
+    ],
+  },
+  {
+    week: 4, phaseId: 1, label: "Week 4 — Deload",
+    sessions: [
+      { day: "Mon", title: "Strength reduced volume", detail: "Squats 3×6, deadlifts 3×5, bench 3×8, same weights fewer sets, stop before failure." },
+      { day: "Tue", title: "Easy run and strides",    detail: "30 min Zone 2 then 4×100m strides at fast but relaxed pace, full recovery between." },
+      { day: "Fri", title: "Light HIIT",              detail: "35 min, lower intensity, focus on movement quality, ski erg, row, wall balls only." },
+    ],
+  },
+  {
+    week: 5, phaseId: 1, label: "Week 5 — Benchmark",
+    sessions: [
+      { day: "Mon",   title: "Strength full body heavier",         detail: "Deadlifts 5×5 heavy, squats 4×8, bench 4×8, single leg work, farmer carry 4×30m." },
+      { day: "Tue",   title: "Speed 800m repeats + time trial",    detail: "Warm up 10 min, 5×800m at 3:55/km, 2 min rest, 1km time trial at end." },
+      { day: "Fri",   title: "HIIT Hyrox circuit",                 detail: "50 min, full circuit with runs between, push quality not just completion." },
+      { day: "Bonus", title: "Zone 2 run (optional)",              detail: "55 min easy." },
+    ],
+  },
+  {
+    week: 6, phaseId: 1, label: "Week 6",
+    sessions: [
+      { day: "Mon",   title: "Strength full body",          detail: "Squats 4×8, deadlifts 4×6, bench 4×8, pull-ups, lunges. Note your weights — next block goes heavier." },
+      { day: "Tue",   title: "Speed threshold run",         detail: "20 min warm up, then 20 min sustained at 4:10/km pace, 10 min cool down." },
+      { day: "Fri",   title: "HIIT Hyrox simulation intro", detail: "Run 500m, station, run 500m, station, 4 rounds — first taste of combined format." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "60 min easy." },
+    ],
+  },
+
+  // -------- Phase 2 — Race Simulation & Threshold --------
+  {
+    week: 7, phaseId: 2, label: "Week 7",
+    sessions: [
+      { day: "Mon",   title: "Strength power focus",        detail: "Deadlifts 5×5 heavy, box jumps 4×6, sled push 4×20m, pull-ups 4×max." },
+      { day: "Tue",   title: "Speed 1km repeats begin",     detail: "5×1km at 4:00/km target, 2 min rest — this is your race pace." },
+      { day: "Fri",   title: "Race simulation — 4 rounds",  detail: "1km run, ski erg 1 min, 1km run, sled push 20m, full rest between rounds." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "60 min easy." },
+    ],
+  },
+  {
+    week: 8, phaseId: 2, label: "Week 8",
+    sessions: [
+      { day: "Mon",   title: "Strength full body",          detail: "Squats 5×5 heavy, Romanian deadlifts 4×8, bench 4×8, bent-over row 4×10, farmer carry." },
+      { day: "Tue",   title: "Speed 1km repeats",           detail: "6×1km at 4:00/km, 90 sec rest (shorter than last week), note if pace holds." },
+      { day: "Fri",   title: "Race simulation — 5 rounds",  detail: "1km run, station, 1km run, station — add wall balls and row this week." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "60 min easy." },
+    ],
+  },
+  {
+    week: 9, phaseId: 2, label: "Week 9",
+    sessions: [
+      { day: "Mon",   title: "Strength lower body heavy",   detail: "Squats 5×5 max effort, walking lunges 4×12 weighted, sled push 5×20m, calf raises." },
+      { day: "Tue",   title: "Speed threshold intervals",   detail: "3×2km at 4:05/km pace, 3 min rest — sustaining speed is the goal." },
+      { day: "Fri",   title: "Race simulation — tired legs", detail: "Do 15 min of burpee broad jumps and squats before starting, then 4 rounds of run and station." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "60 min easy." },
+    ],
+  },
+  {
+    week: 10, phaseId: 2, label: "Week 10 — Deload & Benchmark",
+    sessions: [
+      { day: "Mon", title: "Strength reduced volume",       detail: "Squats 3×6, deadlifts 3×5, bench 3×8 — maintain weight, reduce sets." },
+      { day: "Tue", title: "Easy run + 1km time trial",     detail: "20 min warm up then one fresh 1km all-out. Record your time — this is your Phase 2 benchmark." },
+      { day: "Fri", title: "Light HIIT",                    detail: "35 min, low intensity, focus on form across all Hyrox stations." },
+    ],
+  },
+  {
+    week: 11, phaseId: 2, label: "Week 11",
+    sessions: [
+      { day: "Mon",   title: "Strength full body push",     detail: "Deadlifts 5×5 heavy, bench 4×8, pull-ups 4×max, sled push 4×20m, box jumps 3×8." },
+      { day: "Tue",   title: "Speed 1km repeats — sub 4:00", detail: "6×1km targeting 3:55/km, 90 sec rest — first attempt at breaking your barrier pace." },
+      { day: "Fri",   title: "Race simulation — 6 rounds",  detail: "1km and station repeated 6 times, rotate through all Hyrox stations." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "65 min easy." },
+    ],
+  },
+  {
+    week: 12, phaseId: 2, label: "Week 12",
+    sessions: [
+      { day: "Mon",   title: "Strength full body",          detail: "Squats 5×6, Romanian deadlifts 4×8, bench 4×8, rows 4×10, farmer carry 4×40m." },
+      { day: "Tue",   title: "Speed 2km threshold",         detail: "4×2km at 4:05/km, 2.5 min rest — lungs should be working hard but pace must hold." },
+      { day: "Fri",   title: "Race simulation — full half", detail: "4km total running with 4 stations — closest to doubles race format yet." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "65 min easy." },
+    ],
+  },
+  {
+    week: 13, phaseId: 2, label: "Week 13",
+    sessions: [
+      { day: "Mon",   title: "Strength power and explosivity",     detail: "Deadlifts 3×3 max, box jumps 5×5, sled push 5×20m heavy, sandbag carries 4×20m." },
+      { day: "Tue",   title: "Speed mixed session",                detail: "2×2km at 4:05 then 4×500m at 3:40/km — trains both endurance and top-end speed." },
+      { day: "Fri",   title: "Race simulation — tired legs",       detail: "Pre-fatigue 20 min with squats, lunges, step-ups, then full 4km and 4 stations." },
+      { day: "Bonus", title: "Zone 2 run (optional)",              detail: "65 min easy." },
+    ],
+  },
+  {
+    week: 14, phaseId: 2, label: "Week 14 — Deload",
+    sessions: [
+      { day: "Mon", title: "Strength reduced",      detail: "3 sets each main lift, lower weight, focus on clean form." },
+      { day: "Tue", title: "Zone 2 run",            detail: "45 min easy, active recovery only, no speed work this week." },
+      { day: "Fri", title: "Light Hyrox skills",    detail: "35 min, station technique only — wall ball form, ski erg efficiency, sled push posture." },
+    ],
+  },
+];
+
+function buildPlan() {
+  const byWeek = new Map(REAL_WEEKS.map(w => [w.week, w]));
   const plan = [];
   for (let w = 1; w <= 26; w++) {
+    if (byWeek.has(w)) {
+      plan.push(byWeek.get(w));
+      continue;
+    }
     const phase = PHASES.find(p => w >= p.weeks[0] && w <= p.weeks[1]);
     plan.push({
       week: w,
       phaseId: phase.id,
       label: `Week ${w} — placeholder`,
       sessions: [
-        { day: "Mon", title: "Session A", detail: "Placeholder detail — strength block." },
-        { day: "Tue", title: "Session B", detail: "Placeholder detail — speed block." },
-        { day: "Fri", title: "Session C", detail: "Placeholder detail — Hyrox / HIIT block." },
+        { day: "Mon", title: "Session A", detail: "Placeholder — strength block." },
+        { day: "Tue", title: "Session B", detail: "Placeholder — speed block." },
+        { day: "Fri", title: "Session C", detail: "Placeholder — Hyrox / HIIT block." },
       ],
     });
   }
   return plan;
 }
 
-const PLAN = buildPlaceholderPlan();
+const PLAN = buildPlan();
 
 // --- storage ---------------------------------------------------
 function loadState() {
