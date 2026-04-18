@@ -231,6 +231,10 @@
     margin-top: 1px;
     letter-spacing: 0.08em;
   }
+  .week-date {
+    color: var(--accent);
+    font-weight: 800;
+  }
   .week-badge,
   .week-now {
     font-size: 10px;
@@ -464,7 +468,7 @@
 <div class="container">
   <header class="app-header">
     <h1>Hyrox 26-Week Tracker</h1>
-    <p class="subtitle" id="subtitle">Start 18 Apr 2026 · Hyrox Doubles Dublin</p>
+    <p class="subtitle" id="subtitle">Start 21 Apr 2026 · Hyrox Doubles Dublin</p>
     <div class="progress">
       <span class="progress-label">Overall</span>
       <div class="progress-bar"><div class="progress-fill" id="overallFill"></div></div>
@@ -485,7 +489,13 @@
    Real session content will be populated in a later pass.
 --------------------------------------------------------------- */
 
-const START_DATE = new Date(2026, 3, 18); // 18 April 2026 (month is 0-indexed)
+const START_DATE = new Date(2026, 3, 21); // 21 April 2026 — Week 1 Monday (month is 0-indexed)
+const WEEK_MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function weekStartLabel(n) {
+  const d = new Date(START_DATE);
+  d.setDate(d.getDate() + (n - 1) * 7);
+  return `${d.getDate()} ${WEEK_MONTH_NAMES[d.getMonth()]}`;
+}
 const STORAGE_KEY = "hyrox-tracker-v1";
 
 const PHASES = [
@@ -1132,7 +1142,7 @@ function renderWeek(week) {
     <span class="week-chev">▶</span>
     <span class="week-title">
       ${week.label}
-      <small>Phase ${week.phaseId}</small>
+      <small><span class="week-date">${weekStartLabel(week.week)}</span> · Phase ${week.phaseId}</small>
     </span>
     ${isCurrent ? '<span class="week-now">Now</span>' : ""}
     <span class="week-count">${doneCount}/${total}</span>
