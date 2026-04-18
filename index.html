@@ -3,43 +3,39 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0f172a" />
+<meta name="theme-color" content="#0a0a0a" />
 <title>Hyrox 26-Week Tracker</title>
 <style>
   :root {
-    --bg: #0f172a;
-    --surface: #1e293b;
-    --surface-2: #334155;
-    --text: #f1f5f9;
-    --muted: #94a3b8;
-    --border: #334155;
-    --done: #64748b;
+    --bg: #0a0a0a;
+    --surface: #1a1a1a;
+    --surface-2: #262626;
+    --text: #e0e0e0;
+    --muted: #888888;
+    --border: #2a2a2a;
+    --done: #555555;
 
-    --p1: #3b82f6;
-    --p1-soft: rgba(59, 130, 246, 0.12);
-    --p2: #22c55e;
-    --p2-soft: rgba(34, 197, 94, 0.12);
-    --p3: #f59e0b;
-    --p3-soft: rgba(245, 158, 11, 0.12);
-    --p4: #ef4444;
-    --p4-soft: rgba(239, 68, 68, 0.12);
+    --accent: #F5C400;
+    --accent-soft: rgba(245, 196, 0, 0.10);
+    --accent-strong: #FFD700;
+    --on-accent: #0a0a0a;
+
+    /* All phases use the unified Hyrox accent. */
+    --p1: var(--accent);
+    --p1-soft: var(--accent-soft);
+    --p2: var(--accent);
+    --p2-soft: var(--accent-soft);
+    --p3: var(--accent);
+    --p3-soft: var(--accent-soft);
+    --p4: var(--accent);
+    --p4-soft: var(--accent-soft);
 
     --radius: 12px;
     --radius-sm: 8px;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
   }
 
-  @media (prefers-color-scheme: light) {
-    :root {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --surface-2: #f1f5f9;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --done: #94a3b8;
-    }
-  }
+  ::selection { background: var(--accent); color: var(--on-accent); }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -64,23 +60,28 @@
     position: sticky;
     top: 0;
     background: var(--bg);
-    padding: 12px 0 10px;
+    padding: 14px 0 12px;
     z-index: 10;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 18px;
+    border-bottom: 2px solid var(--accent);
+    margin-bottom: 20px;
   }
 
   h1 {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0 0 10px;
-    letter-spacing: -0.01em;
+    font-size: 22px;
+    font-weight: 900;
+    margin: 0 0 8px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--accent);
   }
 
   .subtitle {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--muted);
-    margin: 0 0 12px;
+    margin: 0 0 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
   }
 
   /* Progress bar */
@@ -91,9 +92,12 @@
     margin-bottom: 2px;
   }
   .progress-label {
-    font-size: 12px;
+    font-size: 10px;
     color: var(--muted);
     min-width: 62px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
   }
   .progress-bar {
     flex: 1;
@@ -101,20 +105,21 @@
     height: 8px;
     border-radius: 999px;
     overflow: hidden;
+    border: 1px solid var(--border);
   }
   .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--p1), var(--p2), var(--p3), var(--p4));
+    background: var(--accent);
     width: 0%;
     transition: width 0.3s ease;
   }
   .progress-pct {
-    font-size: 12px;
+    font-size: 13px;
     font-variant-numeric: tabular-nums;
-    color: var(--text);
-    min-width: 38px;
+    color: var(--accent);
+    min-width: 40px;
     text-align: right;
-    font-weight: 600;
+    font-weight: 800;
   }
 
   /* Phase groups */
@@ -132,17 +137,21 @@
     background: var(--phase-soft, var(--surface));
   }
   .phase-title {
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 800;
     flex: 1;
     min-width: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
   }
   .phase-title small {
     display: block;
-    font-size: 11px;
-    font-weight: 500;
+    font-size: 10px;
+    font-weight: 600;
     color: var(--muted);
     margin-top: 2px;
+    letter-spacing: 0.06em;
   }
   .phase-progress {
     display: flex;
@@ -155,14 +164,15 @@
     height: 6px;
   }
   .phase-progress .progress-fill {
-    background: var(--phase-color, var(--p1));
+    background: var(--accent);
   }
   .phase-pct {
     font-size: 11px;
     font-variant-numeric: tabular-nums;
-    color: var(--muted);
+    color: var(--accent);
     min-width: 32px;
     text-align: right;
+    font-weight: 700;
   }
 
   /* Week card */
@@ -173,11 +183,12 @@
     margin-bottom: 10px;
     overflow: hidden;
     box-shadow: var(--shadow);
-    border-left: 3px solid var(--phase-color, var(--border));
   }
   .week.current {
-    outline: 2px solid var(--phase-color, var(--p1));
+    border-color: var(--accent);
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
+    box-shadow: 0 0 0 0 transparent, 0 0 24px rgba(245, 196, 0, 0.18);
   }
 
   .week-header {
@@ -205,43 +216,43 @@
   .week.open .week-chev { transform: rotate(90deg); }
   .week-title {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 800;
     flex: 1;
     min-width: 0;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
   }
   .week-title small {
     display: block;
     color: var(--muted);
-    font-weight: 400;
-    font-size: 11px;
-    margin-top: 1px;
-  }
-  .week-badge {
+    font-weight: 600;
     font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 999px;
-    background: var(--phase-color, var(--p1));
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    flex-shrink: 0;
+    margin-top: 1px;
+    letter-spacing: 0.08em;
   }
+  .week-date {
+    color: var(--accent);
+    font-weight: 800;
+  }
+  .week-badge,
   .week-now {
     font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
+    font-weight: 800;
+    padding: 3px 10px;
     border-radius: 999px;
-    background: var(--text);
-    color: var(--bg);
+    background: var(--accent);
+    color: var(--on-accent);
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
   }
   .week-count {
     font-size: 11px;
     color: var(--muted);
     font-variant-numeric: tabular-nums;
     flex-shrink: 0;
+    font-weight: 700;
   }
 
   .week-body {
@@ -273,21 +284,86 @@
 
   .session-main { flex: 1; min-width: 0; }
   .session-day {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--muted);
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--accent);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.12em;
   }
   .session-title {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     margin: 2px 0 2px;
+    color: var(--text);
   }
   .session-detail {
     font-size: 13px;
-    color: var(--muted);
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* Structured session blocks: mobility + coach note + alt session */
+  .session-block {
+    margin-top: 6px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 12.5px;
     line-height: 1.45;
+    color: var(--text);
+  }
+  .session-block strong {
+    display: block;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 3px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .session-mobility {
+    background: var(--surface-2);
+    border-left: 2px solid var(--border);
+  }
+  .session-coach {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+  }
+
+  .session-alt {
+    margin-top: 6px;
+    font-size: 12.5px;
+  }
+  .session-alt summary {
+    cursor: pointer;
+    color: var(--muted);
+    padding: 4px 0;
+    font-weight: 600;
+    font-size: 11.5px;
+    list-style: none;
+  }
+  .session-alt summary::-webkit-details-marker { display: none; }
+  .session-alt summary::before {
+    content: "▶ ";
+    font-size: 9px;
+    display: inline-block;
+    transition: transform 0.2s;
+    transform-origin: center;
+    margin-right: 4px;
+  }
+  .session-alt[open] summary::before { transform: rotate(90deg); }
+  .session-alt summary:hover { color: var(--text); }
+  .session-alt-body {
+    padding: 6px 8px;
+    margin-top: 4px;
+    background: var(--surface-2);
+    border-radius: 6px;
+    color: var(--text);
+    line-height: 1.45;
+  }
+
+  .session.done .session-block,
+  .session.done .session-alt-body {
+    opacity: 0.55;
   }
   .session-notes {
     margin-top: 8px;
@@ -318,35 +394,36 @@
   /* Time trial */
   .time-trial {
     margin-top: 10px;
-    padding: 10px 12px;
-    background: var(--phase-soft, var(--surface-2));
+    padding: 12px;
+    background: var(--accent-soft);
     border-radius: var(--radius-sm);
-    border: 1px dashed var(--phase-color, var(--border));
+    border: 1px dashed var(--accent);
   }
   .time-trial-label {
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 10px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--phase-color, var(--text));
+    letter-spacing: 0.12em;
+    color: var(--accent);
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   .time-trial input {
     font: inherit;
-    font-size: 16px;
+    font-size: 18px;
     font-variant-numeric: tabular-nums;
-    font-weight: 600;
-    padding: 6px 10px;
-    width: 100px;
+    font-weight: 800;
+    padding: 8px 12px;
+    width: 110px;
     text-align: center;
-    background: var(--surface);
-    color: var(--text);
+    background: var(--bg);
+    color: var(--accent);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
+    letter-spacing: 0.06em;
   }
   .time-trial input:focus {
-    outline: 2px solid var(--phase-color, var(--p1));
+    outline: 2px solid var(--accent);
     outline-offset: 1px;
     border-color: transparent;
   }
@@ -354,29 +431,35 @@
   /* Reset button */
   .footer-actions {
     text-align: center;
-    margin-top: 24px;
+    margin-top: 32px;
   }
   .btn-reset {
     font: inherit;
-    font-size: 12px;
+    font-size: 11px;
     color: var(--muted);
     background: transparent;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 6px 14px;
+    padding: 8px 18px;
     cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
   }
-  .btn-reset:hover { color: var(--text); }
+  .btn-reset:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
 
-  /* Phase color classes */
-  .phase-1 { --phase-color: var(--p1); --phase-soft: var(--p1-soft); }
-  .phase-2 { --phase-color: var(--p2); --phase-soft: var(--p2-soft); }
-  .phase-3 { --phase-color: var(--p3); --phase-soft: var(--p3-soft); }
-  .phase-4 { --phase-color: var(--p4); --phase-soft: var(--p4-soft); }
+  /* Phase classes carry no colour — Hyrox brand uses unified yellow accent */
+  .phase-1, .phase-2, .phase-3, .phase-4 {
+    --phase-color: var(--accent);
+    --phase-soft: var(--accent-soft);
+  }
 
   @media (min-width: 560px) {
     .container { padding: 20px 20px 60px; }
-    h1 { font-size: 24px; }
+    h1 { font-size: 26px; }
     .week-title { font-size: 15px; }
   }
 </style>
@@ -385,7 +468,7 @@
 <div class="container">
   <header class="app-header">
     <h1>Hyrox 26-Week Tracker</h1>
-    <p class="subtitle" id="subtitle">Start 18 Apr 2026 · Hyrox Doubles Dublin</p>
+    <p class="subtitle" id="subtitle">Start 21 Apr 2026 · Hyrox Doubles Dublin</p>
     <div class="progress">
       <span class="progress-label">Overall</span>
       <div class="progress-bar"><div class="progress-fill" id="overallFill"></div></div>
@@ -406,7 +489,13 @@
    Real session content will be populated in a later pass.
 --------------------------------------------------------------- */
 
-const START_DATE = new Date(2026, 3, 18); // 18 April 2026 (month is 0-indexed)
+const START_DATE = new Date(2026, 3, 21); // 21 April 2026 — Week 1 Monday (month is 0-indexed)
+const WEEK_MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function weekStartLabel(n) {
+  const d = new Date(START_DATE);
+  d.setDate(d.getDate() + (n - 1) * 7);
+  return `${d.getDate()} ${WEEK_MONTH_NAMES[d.getMonth()]}`;
+}
 const STORAGE_KEY = "hyrox-tracker-v1";
 
 const PHASES = [
@@ -418,60 +507,129 @@ const PHASES = [
 
 const TIME_TRIAL_WEEKS = new Set([5, 10, 18, 26]);
 
-// Real plan data — Phases 1 & 2 populated. Phases 3 & 4 remain placeholder until supplied.
+// Real plan data — full refined 26-week plan with mobility, weights, coach notes and alt sessions.
 const REAL_WEEKS = [
   // -------- Phase 1 — Foundation & Speed Mechanics --------
   {
     week: 1, phaseId: 1, label: "Week 1",
     sessions: [
-      { day: "Mon",   title: "Strength full body baseline", detail: "Squats 4×8, deadlifts 4×6, bench press 3×10, bent-over row 3×10, farmer carry 3×30m." },
-      { day: "Tue",   title: "Speed 600m repeats",          detail: "Warm up 10 min, 6×600m at 3:50/km, 90 sec rest, cool down 10 min." },
-      { day: "Fri",   title: "HIIT Hyrox station work",     detail: "50 min, ski erg, sled push, burpee broad jumps, wall balls, short rest intervals." },
-      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "45–50 min easy conversational pace, heart rate 130–145." },
+      {
+        day: "Mon", title: "Strength full body baseline",
+        mobility: "Hip flexor stretch 2×45s each side, ankle circles 20 reps, thoracic rotation with band 2×10, cat-cow 10 reps.",
+        detail: "Squat 4×8 @ 72kg, Deadlift 4×6 @ 102kg, Bench press 3×10 @ 62kg, Bent-over row 3×10 @ 55kg, Farmer carry 3×30m @ 32kg per hand.",
+        coachNote: "Prioritise depth over weight on squat. If you can't hit parallel reduce to 65kg and focus on range. Film yourself from side view — ankle mobility is likely the limiter.",
+      },
+      {
+        day: "Tue", title: "Speed 6×600m at 3:50/km",
+        detail: "10 min warm up, 6×600m with 90 sec rest, 10 min cool down. Focus on relaxed running form — at your height cadence matters more than stride length.",
+      },
+      {
+        day: "Fri", title: "Hyrox ski erg technique and stations",
+        detail: "50 min. Start with 3×3 min ski erg focusing purely on technique — arms wide, hinge from hips not lower back, drive through heels. Then sled push, burpee broad jumps, wall balls.",
+        altSession: "3×5 min ski erg at 70% effort, 3×500m run at 3:50/km, 3×3 min row, 90 sec rest between. 45 min total.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "45–50 min easy conversational pace, heart rate 130–145." },
     ],
   },
   {
     week: 2, phaseId: 1, label: "Week 2",
     sessions: [
-      { day: "Mon",   title: "Strength lower body focus",   detail: "Squats 4×8, Romanian deadlifts 4×10, walking lunges 3×12, sled push 4×20m heavy." },
-      { day: "Tue",   title: "Speed 600m repeats",          detail: "Warm up 10 min, 7×600m at 3:50/km, 90 sec rest, focus on consistent splits." },
-      { day: "Fri",   title: "HIIT Hyrox station work",     detail: "50 min, row, sandbag lunges, wall balls, ski erg, minimal rest between stations." },
-      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "50 min easy, focus on nasal breathing." },
+      {
+        day: "Mon", title: "Strength lower body focus",
+        mobility: "Same as Week 1, plus goblet squat hold 3×30s at bottom position with 16kg.",
+        detail: "Squat 4×8 @ 72kg, Romanian deadlift 4×10 @ 85kg, Walking lunges 3×12 @ 20kg per hand, Sled push 4×20m heavy, Calf raises 3×15 bodyweight.",
+      },
+      {
+        day: "Tue", title: "Speed 7×600m at 3:50/km",
+        detail: "10 min warm up, 7×600m with 90 sec rest. One more rep than last week. Focus on consistent splits — last rep should match first.",
+      },
+      {
+        day: "Fri", title: "Hyrox row, sandbag lunges, wall balls, ski erg",
+        detail: "50 min. Minimal rest between stations. Row 1000m, sandbag lunges 2×10, wall balls 3×20, ski erg 3 min. Repeat circuit twice.",
+        altSession: "4×4 min row at 2:05/500m pace, 4×500m run at 3:50/km, 4×3 min ski erg, 90 sec rest between all efforts.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "50 min easy, focus on nasal breathing." },
     ],
   },
   {
     week: 3, phaseId: 1, label: "Week 3",
     sessions: [
-      { day: "Mon",   title: "Strength full body",          detail: "Deadlifts 4×6 heavier, bench press 4×8, pull-ups 3×max, box jumps 3×8, plank holds." },
-      { day: "Tue",   title: "Speed mixed 400/800m",        detail: "4×400m at 3:40/km then 3×800m at 3:55/km, 2 min rest between each." },
-      { day: "Fri",   title: "HIIT Hyrox station work",     detail: "50 min, add 200m run between each station block to simulate race structure." },
-      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "55 min easy, keep it genuinely easy." },
+      {
+        day: "Mon", title: "Strength full body slight increase",
+        mobility: "Add pigeon pose 45s each side — targets hip external rotation which directly improves squat depth.",
+        detail: "Deadlift 4×6 @ 107kg, Bench press 4×8 @ 65kg, Pull-ups 3×max targeting 8–12, Box jumps 3×8 bodyweight, Plank 3×45s.",
+      },
+      {
+        day: "Tue", title: "Speed mixed 400m and 800m",
+        detail: "4×400m at 3:40/km then 3×800m at 3:55/km. 2 min rest between each. First taste of varied pace work.",
+      },
+      {
+        day: "Fri", title: "Hyrox add 200m runs between stations",
+        detail: "50 min. Run 200m, station, repeat. First simulation of race structure. Keep station weights moderate.",
+        altSession: "Run 400m, 3 min ski erg, run 400m, 3 min row. 5 rounds. 90 sec rest between rounds.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "55 min easy, keep it genuinely easy." },
     ],
   },
   {
     week: 4, phaseId: 1, label: "Week 4 — Deload",
     sessions: [
-      { day: "Mon", title: "Strength reduced volume", detail: "Squats 3×6, deadlifts 3×5, bench 3×8, same weights fewer sets, stop before failure." },
-      { day: "Tue", title: "Easy run and strides",    detail: "30 min Zone 2 then 4×100m strides at fast but relaxed pace, full recovery between." },
-      { day: "Fri", title: "Light HIIT",              detail: "35 min, lower intensity, focus on movement quality, ski erg, row, wall balls only." },
+      {
+        day: "Mon", title: "Strength reduced volume",
+        mobility: "Extended to 15 min this week — deload week is your best mobility week. Add foam rolling quads and IT band.",
+        detail: "Squat 3×6 @ 72kg, Deadlift 3×5 @ 102kg, Bench 3×8 @ 62kg. Same weights fewer sets, stop before failure on every set.",
+      },
+      {
+        day: "Tue", title: "Easy run and strides",
+        detail: "30 min Zone 2 then 4×100m strides at fast but relaxed pace. Full recovery between strides.",
+      },
+      {
+        day: "Fri", title: "Light Hyrox skills",
+        detail: "35 min. Ski erg technique only — no intensity. Row at conversational pace. Wall ball form work at light weight.",
+        altSession: "30 min easy run, 2×8 min ski erg at 60% effort.",
+      },
     ],
   },
   {
-    week: 5, phaseId: 1, label: "Week 5 — Benchmark",
+    week: 5, phaseId: 1, label: "Week 5 — Benchmark 1",
     sessions: [
-      { day: "Mon",   title: "Strength full body heavier",         detail: "Deadlifts 5×5 heavy, squats 4×8, bench 4×8, single leg work, farmer carry 4×30m." },
-      { day: "Tue",   title: "Speed 800m repeats + time trial",    detail: "Warm up 10 min, 5×800m at 3:55/km, 2 min rest, 1km time trial at end." },
-      { day: "Fri",   title: "HIIT Hyrox circuit",                 detail: "50 min, full circuit with runs between, push quality not just completion." },
-      { day: "Bonus", title: "Zone 2 run (optional)",              detail: "55 min easy." },
+      {
+        day: "Mon", title: "Strength full body — first progression",
+        mobility: "Check squat depth progress vs Week 1. If improving, add 2.5kg to squat target.",
+        detail: "Deadlift 5×5 @ 112kg, Squat 4×8 @ 75kg, Bench 4×8 @ 67kg, Single leg press 3×10 each, Farmer carry 4×30m @ 34kg per hand.",
+      },
+      {
+        day: "Tue", title: "Speed 5×800m + 1km time trial (Benchmark 1)",
+        detail: "Warm up 10 min, 5×800m at 3:55/km with 2 min rest. Full rest 5 min. Then one all-out 1km time trial — record your time.",
+        coachNote: "Don't go out too fast. First 400m should feel controlled. The time matters less than the benchmark — you'll beat it by Week 10.",
+      },
+      {
+        day: "Fri", title: "Hyrox full circuit — push quality",
+        detail: "50 min. All major stations. Focus on quality over speed — your stations are a strength, use these sessions to maintain them while your running catches up.",
+        altSession: "5×4 min row at 2:00/500m, 5×400m run at 3:45/km, 90 sec rest between efforts.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "55 min easy." },
     ],
   },
   {
     week: 6, phaseId: 1, label: "Week 6",
     sessions: [
-      { day: "Mon",   title: "Strength full body",          detail: "Squats 4×8, deadlifts 4×6, bench 4×8, pull-ups, lunges. Note your weights — next block goes heavier." },
-      { day: "Tue",   title: "Speed threshold run",         detail: "20 min warm up, then 20 min sustained at 4:10/km pace, 10 min cool down." },
-      { day: "Fri",   title: "HIIT Hyrox simulation intro", detail: "Run 500m, station, run 500m, station, 4 rounds — first taste of combined format." },
-      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "60 min easy." },
+      {
+        day: "Mon", title: "Strength — consolidate Phase 1",
+        mobility: "Note your squat depth vs Week 1 — write it down.",
+        detail: "Squat 4×8 @ 77kg, Deadlift 4×6 @ 110kg, Bench 4×8 @ 67kg, Pull-ups 3×max, Lunges 3×12 @ 22kg per hand.",
+        coachNote: "Note every weight used this week — Phase 2 starts 5–7% heavier. These are your Phase 1 exit numbers.",
+      },
+      {
+        day: "Tue", title: "Speed 20 min threshold at 4:10/km",
+        detail: "20 min warm up, 20 min sustained at 4:10/km comfortably hard, 10 min cool down. First sustained threshold effort.",
+      },
+      {
+        day: "Fri", title: "Hyrox — first race simulation intro",
+        detail: "Run 500m, station, run 500m, station. 4 rounds. Combined format for the first time — notice how your legs feel on the run after stations.",
+        altSession: "Run 500m, 4 min ski erg, run 500m, 4 min row. 4 rounds. 2 min rest between rounds.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "60 min easy." },
     ],
   },
 
@@ -479,71 +637,161 @@ const REAL_WEEKS = [
   {
     week: 7, phaseId: 2, label: "Week 7",
     sessions: [
-      { day: "Mon",   title: "Strength power focus",        detail: "Deadlifts 5×5 heavy, box jumps 4×6, sled push 4×20m, pull-ups 4×max." },
-      { day: "Tue",   title: "Speed 1km repeats begin",     detail: "5×1km at 4:00/km target, 2 min rest — this is your race pace." },
-      { day: "Fri",   title: "Race simulation — 4 rounds",  detail: "1km run, ski erg 1 min, 1km run, sled push 20m, full rest between rounds." },
-      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "60 min easy." },
+      {
+        day: "Mon", title: "Strength power focus — weights increase",
+        mobility: "Add deep squat hold with heel elevation if depth still limited, 3×30s. Heavier loads this phase demand better positions.",
+        detail: "Deadlift 5×5 @ 120kg, Box jumps 4×6 bodyweight, Sled push 4×20m heavy, Pull-ups 4×max, Bench 3×8 @ 70kg.",
+      },
+      {
+        day: "Tue", title: "Speed 5×1km at 4:00/km — race pace begins",
+        detail: "2 min rest. Get comfortable with how this pace feels — it's your Hyrox target.",
+      },
+      {
+        day: "Fri", title: "Hyrox 4-round race simulation",
+        detail: "1km run, ski erg 1 min, 1km run, sled push 20m. Full rest between rounds. Focus on maintaining run pace after station work.",
+        altSession: "1km run at 4:00/km, 4 min ski erg, 1km run, 4 min row. 4 rounds. 90 sec rest.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "60 min easy." },
     ],
   },
   {
     week: 8, phaseId: 2, label: "Week 8",
     sessions: [
-      { day: "Mon",   title: "Strength full body",          detail: "Squats 5×5 heavy, Romanian deadlifts 4×8, bench 4×8, bent-over row 4×10, farmer carry." },
-      { day: "Tue",   title: "Speed 1km repeats",           detail: "6×1km at 4:00/km, 90 sec rest (shorter than last week), note if pace holds." },
-      { day: "Fri",   title: "Race simulation — 5 rounds",  detail: "1km run, station, 1km run, station — add wall balls and row this week." },
-      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "60 min easy." },
+      {
+        day: "Mon", title: "Strength full body — heavier",
+        mobility: "Shoulder specific — band pull-aparts 3×15, wall slides 2×10. Warm shoulder up properly before bench given history.",
+        detail: "Squat 5×5 @ 82kg, Romanian deadlift 4×8 @ 90kg, Bench 4×8 @ 72kg, Bent-over row 4×10 @ 62kg, Farmer carry 4×30m @ 36kg per hand.",
+      },
+      {
+        day: "Tue", title: "Speed 6×1km at 4:00/km — shorter rest",
+        detail: "Rest drops to 90 sec. Pace must hold. If it doesn't, extend rest to 2 min — pace matters more than rest time.",
+      },
+      {
+        day: "Fri", title: "Hyrox 5 rounds — wall balls and row added",
+        detail: "1km run, station, 1km run, station. 5 rounds rotating: ski erg, sled push, wall balls 20 reps, row 500m.",
+        altSession: "1km run, 5 min row, 1km run, 5 min ski erg. 5 rounds. 90 sec rest.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "60 min easy." },
     ],
   },
   {
     week: 9, phaseId: 2, label: "Week 9",
     sessions: [
-      { day: "Mon",   title: "Strength lower body heavy",   detail: "Squats 5×5 max effort, walking lunges 4×12 weighted, sled push 5×20m, calf raises." },
-      { day: "Tue",   title: "Speed threshold intervals",   detail: "3×2km at 4:05/km pace, 3 min rest — sustaining speed is the goal." },
-      { day: "Fri",   title: "Race simulation — tired legs", detail: "Do 15 min of burpee broad jumps and squats before starting, then 4 rounds of run and station." },
-      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "60 min easy." },
+      {
+        day: "Mon", title: "Strength lower body heavy",
+        mobility: "Goblet squat 3×30s hold at bottom, hip circles 20 each direction, ankle mob with band.",
+        detail: "Squat 5×5 @ 85kg, Walking lunges 4×12 @ 24kg per hand, Sled push 5×20m heavy, Calf raises 3×20, Leg press 3×10 heavy.",
+      },
+      {
+        day: "Tue", title: "Speed 3×2km at 4:05/km",
+        detail: "3 min rest. Sustaining pace is harder than repeating it — this is where real threshold improvements happen.",
+      },
+      {
+        day: "Fri", title: "Hyrox tired legs protocol",
+        detail: "Pre-fatigue 15 min of burpee broad jumps and squats. Then 4 rounds of 1km run and station. Deliberately uncomfortable — your race legs will feel like this.",
+        altSession: "Pre-fatigue 50 air squats and 20 burpees. Then 1km run at 4:00/km, 5 min ski erg. 4 rounds. 90 sec rest.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "60 min easy." },
     ],
   },
   {
-    week: 10, phaseId: 2, label: "Week 10 — Deload & Benchmark",
+    week: 10, phaseId: 2, label: "Week 10 — Deload & Benchmark 2",
     sessions: [
-      { day: "Mon", title: "Strength reduced volume",       detail: "Squats 3×6, deadlifts 3×5, bench 3×8 — maintain weight, reduce sets." },
-      { day: "Tue", title: "Easy run + 1km time trial",     detail: "20 min warm up then one fresh 1km all-out. Record your time — this is your Phase 2 benchmark." },
-      { day: "Fri", title: "Light HIIT",                    detail: "35 min, low intensity, focus on form across all Hyrox stations." },
+      {
+        day: "Mon", title: "Strength reduced volume",
+        mobility: "Extended 15 min: full hip and ankle routine. Compare squat depth to Week 4 — document changes.",
+        detail: "Squat 3×6 @ 82kg, Deadlift 3×5 @ 115kg, Bench 3×8 @ 68kg.",
+      },
+      {
+        day: "Tue", title: "Easy run + 1km time trial (Benchmark 2)",
+        detail: "20 min easy warm up. Full rest 3 min. One all-out 1km. Compare to Week 5 — you should see 5–10 sec improvement minimum.",
+        coachNote: "If you haven't improved it's likely Tuesday speed sessions need more focus. Don't skip rest days between hard sessions.",
+      },
+      {
+        day: "Fri", title: "Light Hyrox form session",
+        detail: "35 min. Technique only across all stations. Ski erg arm width, sled push angle, row drive pattern. No racing the clock.",
+        altSession: "30 min easy run, 2×10 min ski erg at 65% effort.",
+      },
     ],
   },
   {
     week: 11, phaseId: 2, label: "Week 11",
     sessions: [
-      { day: "Mon",   title: "Strength full body push",     detail: "Deadlifts 5×5 heavy, bench 4×8, pull-ups 4×max, sled push 4×20m, box jumps 3×8." },
-      { day: "Tue",   title: "Speed 1km repeats — sub 4:00", detail: "6×1km targeting 3:55/km, 90 sec rest — first attempt at breaking your barrier pace." },
-      { day: "Fri",   title: "Race simulation — 6 rounds",  detail: "1km and station repeated 6 times, rotate through all Hyrox stations." },
-      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "65 min easy." },
+      {
+        day: "Mon", title: "Strength full body push",
+        mobility: "Shoulder band work before bench — pull-aparts 3×15, face pulls 3×12 if cables available.",
+        detail: "Deadlift 5×5 @ 125kg, Bench 4×8 @ 74kg, Pull-ups 4×max, Sled push 4×20m heavy, Box jumps 3×8.",
+      },
+      {
+        day: "Tue", title: "Speed 6×1km at 3:55/km — first sub-4:00",
+        detail: "90 sec rest. This will feel hard — that's correct. Your body is adapting to a new ceiling.",
+      },
+      {
+        day: "Fri", title: "Hyrox 6 rounds — all stations",
+        detail: "1km and station repeated 6 times, rotate through all 8 Hyrox stations. Longest race simulation yet.",
+        altSession: "1km run, 5 min ski erg, 1km run, 5 min row. 6 rounds. 60 sec rest.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "65 min easy." },
     ],
   },
   {
     week: 12, phaseId: 2, label: "Week 12",
     sessions: [
-      { day: "Mon",   title: "Strength full body",          detail: "Squats 5×6, Romanian deadlifts 4×8, bench 4×8, rows 4×10, farmer carry 4×40m." },
-      { day: "Tue",   title: "Speed 2km threshold",         detail: "4×2km at 4:05/km, 2.5 min rest — lungs should be working hard but pace must hold." },
-      { day: "Fri",   title: "Race simulation — full half", detail: "4km total running with 4 stations — closest to doubles race format yet." },
-      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "65 min easy." },
+      {
+        day: "Mon", title: "Strength full body — volume peak",
+        mobility: "Pigeon pose 60s each side, thoracic rotation, goblet squat hold — carrying heavy loads this week so position matters.",
+        detail: "Squat 5×6 @ 87kg, Romanian deadlift 4×8 @ 95kg, Bench 4×8 @ 74kg, Rows 4×10 @ 65kg, Farmer carry 4×40m @ 38kg per hand.",
+      },
+      {
+        day: "Tue", title: "Speed 4×2km at 4:05/km",
+        detail: "2.5 min rest. One more rep than Week 9. Lungs working hard but pace must hold across all 4 reps.",
+      },
+      {
+        day: "Fri", title: "Hyrox full doubles — half simulation",
+        detail: "4km total running with 4 stations. Closest to actual doubles race format yet — time yourself end to end.",
+        altSession: "4×1km run at 4:00/km, 4×4 min ski erg or row alternating. Record total time.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "65 min easy." },
     ],
   },
   {
     week: 13, phaseId: 2, label: "Week 13",
     sessions: [
-      { day: "Mon",   title: "Strength power and explosivity",     detail: "Deadlifts 3×3 max, box jumps 5×5, sled push 5×20m heavy, sandbag carries 4×20m." },
-      { day: "Tue",   title: "Speed mixed session",                detail: "2×2km at 4:05 then 4×500m at 3:40/km — trains both endurance and top-end speed." },
-      { day: "Fri",   title: "Race simulation — tired legs",       detail: "Pre-fatigue 20 min with squats, lunges, step-ups, then full 4km and 4 stations." },
-      { day: "Bonus", title: "Zone 2 run (optional)",              detail: "65 min easy." },
+      {
+        day: "Mon", title: "Strength power and explosivity",
+        mobility: "Full routine — box jumps and heavy deadlifts today demand full hip extension.",
+        detail: "Deadlift 3×3 @ 140kg, Box jumps 5×5 bodyweight, Sled push 5×20m heavy, Sandbag carry 4×20m, Pull-ups 3×max weighted if possible.",
+        coachNote: "140kg is 82% of your 1RM — heavy day. Warm up with 3 progressive sets before working sets. Back off to 130kg if form breaks.",
+      },
+      {
+        day: "Tue", title: "Speed mixed — endurance and top end",
+        detail: "2×2km at 4:05/km, full rest 4 min, then 4×500m at 3:40/km. Trains both sustained pace and top-end speed in one session.",
+      },
+      {
+        day: "Fri", title: "Hyrox tired legs protocol — full format",
+        detail: "Pre-fatigue 20 min squats, lunges, step-ups. Then full 4km and 4 stations. Race-uncomfortable by design — builds mental toughness alongside physical.",
+        altSession: "Pre-fatigue 100 air squats and 30 burpees. Then 4×1km run at 4:00/km, 4×4 min ski erg. 60 sec rest between efforts.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "65 min easy." },
     ],
   },
   {
     week: 14, phaseId: 2, label: "Week 14 — Deload",
     sessions: [
-      { day: "Mon", title: "Strength reduced",      detail: "3 sets each main lift, lower weight, focus on clean form." },
-      { day: "Tue", title: "Zone 2 run",            detail: "45 min easy, active recovery only, no speed work this week." },
-      { day: "Fri", title: "Light Hyrox skills",    detail: "35 min, station technique only — wall ball form, ski erg efficiency, sled push posture." },
+      {
+        day: "Mon", title: "Strength reduced — form focus",
+        mobility: "Extended 15 min: full routine plus foam rolling. 8 hard weeks done — this recovery week is as important as any training week.",
+        detail: "Squat 3×6 @ 82kg, Deadlift 3×4 @ 115kg, Bench 3×6 @ 68kg.",
+      },
+      {
+        day: "Tue", title: "Zone 2 run — 45 min easy",
+        detail: "Active recovery only. No speed work this week. Let the adaptations from Weeks 11–13 settle.",
+      },
+      {
+        day: "Fri", title: "Light Hyrox skills",
+        detail: "35 min. Technique only — ski erg arm mechanics, wall ball arc, row catch position. No intensity.",
+        altSession: "30 min easy run, 2×8 min ski erg at 60% effort.",
+      },
     ],
   },
 
@@ -551,54 +799,123 @@ const REAL_WEEKS = [
   {
     week: 15, phaseId: 3, label: "Week 15",
     sessions: [
-      { day: "Mon",   title: "Strength maintain not build",          detail: "Deadlifts 4×5, squats 4×6, bench 3×8, pull-ups 3×max — weights stay high but volume reduces." },
-      { day: "Tue",   title: "Speed 1km repeats at 3:50",            detail: "7×1km targeting 3:50/km, 90 sec rest — this should now feel like your new normal pace." },
-      { day: "Fri",   title: "Full Hyrox simulation — doubles",      detail: "8km total running, all 8 stations, split effort as you would with your partner, time yourself." },
-      { day: "Bonus", title: "Zone 2 run (optional)",                detail: "65 min easy." },
+      {
+        day: "Mon", title: "Strength maintain — not build",
+        mobility: "Strength volume reduces this phase — mobility becomes even more important as you're running harder.",
+        detail: "Deadlift 4×5 @ 130kg, Squat 4×6 @ 90kg, Bench 3×8 @ 76kg, Pull-ups 3×max, Sandbag lunges 3×10.",
+        coachNote: "Strength is now maintenance mode — resist the urge to push heavier, your energy is needed for running.",
+      },
+      {
+        day: "Tue", title: "Speed 7×1km at 3:50/km",
+        detail: "90 sec rest. This should feel like your new normal. If 3:50 feels hard you're right on track.",
+      },
+      {
+        day: "Fri", title: "Hyrox full doubles simulation — timed",
+        detail: "8km total running, all 8 stations, split as you would with your partner. Time the whole thing — this is your Phase 3 simulation benchmark.",
+        altSession: "8×1km run at 3:55/km alternating with 8×4 min ski erg or row. Record total time.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "65 min easy." },
     ],
   },
   {
     week: 16, phaseId: 3, label: "Week 16",
     sessions: [
-      { day: "Mon",   title: "Strength maintain",              detail: "Squats 4×6, Romanian deadlifts 4×8, bench 3×8, sled push 4×20m, farmer carry." },
-      { day: "Tue",   title: "Speed 3km tempo",                detail: "2×3km at 4:10/km, 3 min rest — sustained race pace effort, focus on breathing pattern." },
-      { day: "Fri",   title: "Race simulation — full & timed", detail: "Complete doubles format, record splits per km and per station." },
-      { day: "Bonus", title: "Zone 2 run (optional)",          detail: "70 min easy." },
+      {
+        day: "Mon", title: "Strength maintain",
+        mobility: "Add thoracic rotation — heavier bench and rows can tighten upper back.",
+        detail: "Squat 4×6 @ 90kg, Romanian deadlift 4×8 @ 100kg, Bench 3×8 @ 76kg, Sled push 4×20m heavy, Farmer carry 4×40m @ 40kg per hand.",
+      },
+      {
+        day: "Tue", title: "Speed 2×3km at 4:10/km",
+        detail: "3 min rest. Sustained race pace for 3km — find a breathing rhythm and hold it. Hardest sustained effort yet.",
+      },
+      {
+        day: "Fri", title: "Hyrox full timed — analyse splits",
+        detail: "Complete doubles format, record km splits and station times separately. Start identifying where you lose time.",
+        altSession: "8×1km run at 3:55/km, 8×4 min ski erg or row alternating. Record and compare to Week 15.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "70 min easy." },
     ],
   },
   {
     week: 17, phaseId: 3, label: "Week 17",
     sessions: [
-      { day: "Mon",   title: "Strength maintain",              detail: "Deadlifts 4×5, box jumps 3×6, bench 3×8, rows 3×10." },
-      { day: "Tue",   title: "Speed 1km sub 3:50 push",        detail: "8×1km at 3:48–3:50/km, 90 sec rest — this is a hard session." },
-      { day: "Fri",   title: "Race simulation — pre-fatigued", detail: "20 min heavy station work then full 8km and 8 stations." },
-      { day: "Bonus", title: "Zone 2 run (optional)",          detail: "70 min easy." },
+      {
+        day: "Mon", title: "Strength maintain",
+        mobility: "Check in on shoulder — if any discomfort on bench drop 5kg and add a set instead.",
+        detail: "Deadlift 4×5 @ 132kg, Box jumps 3×6, Bench 3×8 @ 76kg, Rows 3×10 @ 68kg, Pull-ups 3×max.",
+      },
+      {
+        day: "Tue", title: "Speed 8×1km at 3:48–3:50/km",
+        detail: "90 sec rest. This is a hard session. Embrace it — by race day this pace will feel manageable.",
+        coachNote: "If you hit a wall on rep 6 or 7 extend rest to 2 min for last two reps. Don't sacrifice pace for volume.",
+      },
+      {
+        day: "Fri", title: "Hyrox pre-fatigued — full simulation",
+        detail: "20 min heavy station work first then full 8km and 8 stations. Hardest session of Phase 3 — train through fatigue deliberately.",
+        altSession: "Pre-fatigue 20 min ski erg intervals at 85% effort. Then 8×1km run at 3:55/km, 8×4 min row. 60 sec rest.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "70 min easy." },
     ],
   },
   {
-    week: 18, phaseId: 3, label: "Week 18 — Deload & Benchmark",
+    week: 18, phaseId: 3, label: "Week 18 — Deload & Benchmark 3",
     sessions: [
-      { day: "Mon", title: "Strength reduced",     detail: "3 sets per exercise, moderate weight, no new PBs this week." },
-      { day: "Tue", title: "1km time trial",       detail: "Full warm up then one all-out 1km — this is your Phase 3 benchmark, compare to Week 10." },
-      { day: "Fri", title: "Light Hyrox skills",   detail: "40 min technique and efficiency focus, no racing the clock." },
+      {
+        day: "Mon", title: "Strength reduced — moderate weight",
+        mobility: "Extended 15 min: full hip, ankle, shoulder routine. Note any areas of tightness from Phase 3 — address them this week.",
+        detail: "Squat 3×5 @ 87kg, Deadlift 3×4 @ 120kg, Bench 2×8 @ 72kg.",
+      },
+      {
+        day: "Tue", title: "1km time trial (Benchmark 3)",
+        detail: "Full warm up then one all-out 1km. Compare to Weeks 5 and 10. You should be approaching or under 3:50 by now.",
+        coachNote: "Pace target progression: Week 5 target 4:00, Week 10 target 3:55, Week 18 target 3:48, Week 26 target 3:45.",
+      },
+      {
+        day: "Fri", title: "Light Hyrox technique and efficiency",
+        detail: "40 min. No racing the clock. Clean movement patterns only. Arrive at Phase 4 fresh.",
+        altSession: "35 min easy run, 2×10 min ski erg at 65% effort.",
+      },
     ],
   },
   {
     week: 19, phaseId: 3, label: "Week 19",
     sessions: [
-      { day: "Mon",   title: "Strength maintain",               detail: "Deadlifts 4×5, squats 4×6, bench 3×8, pull-ups 3×max, sandbag lunges 3×10." },
-      { day: "Tue",   title: "Speed race pace ladder",          detail: "500m at 3:40 → 1km at 3:50 → 2km at 4:00 → 1km at 3:50 → 500m at 3:40, full rest between." },
-      { day: "Fri",   title: "Full race simulation — timed",    detail: "Full doubles format, target a personal best simulation time." },
-      { day: "Bonus", title: "Zone 2 run (optional)",           detail: "70 min easy." },
+      {
+        day: "Mon", title: "Strength maintain",
+        mobility: "Standard routine — your mobility should be noticeably better than Week 1 by this point.",
+        detail: "Deadlift 4×5 @ 132kg, Squat 4×6 @ 90kg, Bench 3×8 @ 76kg, Pull-ups 3×max, Sandbag lunges 3×10.",
+      },
+      {
+        day: "Tue", title: "Speed race pace ladder",
+        detail: "500m at 3:40/km, 1km at 3:50/km, 2km at 4:00/km, 1km at 3:50/km, 500m at 3:40/km. Full rest between each. Trains top end and sustained pace in one session.",
+      },
+      {
+        day: "Fri", title: "Hyrox full simulation — PB attempt",
+        detail: "Full doubles format — go for your best simulation time yet. Record every split.",
+        altSession: "8×1km at 3:52/km alternating with 8×4 min ski erg or row. Push hard — personal best attempt.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "70 min easy." },
     ],
   },
   {
     week: 20, phaseId: 3, label: "Week 20",
     sessions: [
-      { day: "Mon",   title: "Strength maintain",                     detail: "Same as Week 19: deadlifts 4×5, squats 4×6, bench 3×8, pull-ups 3×max, sandbag lunges 3×10." },
-      { day: "Tue",   title: "Speed 2km repeats",                     detail: "4×2km at 4:00/km, 2 min rest — sustained race pace for longer than race distance." },
-      { day: "Fri",   title: "Race simulation — station efficiency",  detail: "Full format focusing on clean handoffs and minimising dead time." },
-      { day: "Bonus", title: "Zone 2 run (optional)",                 detail: "70 min easy." },
+      {
+        day: "Mon", title: "Strength maintain — same as Week 19",
+        mobility: "Consistent routine — your strength is your armour now, protect it without adding stress.",
+        detail: "Deadlift 4×5 @ 132kg, Squat 4×6 @ 90kg, Bench 3×8 @ 76kg, Rows 3×10 @ 68kg, Farmer carry 4×40m @ 40kg per hand.",
+      },
+      {
+        day: "Tue", title: "Speed 4×2km at 4:00/km",
+        detail: "2 min rest. Sustained race pace for longer than race distance — on race day 1km will feel short by comparison.",
+      },
+      {
+        day: "Fri", title: "Hyrox station efficiency focus",
+        detail: "Full format focusing on transitions and handoffs. Minimise dead time between running and stations. End of Phase 3 — you should be feeling sharp.",
+        altSession: "8×1km run at 3:52/km alternating with 8×4 min ski erg or row. Focus on fast transitions.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "70 min easy." },
     ],
   },
 
@@ -606,52 +923,99 @@ const REAL_WEEKS = [
   {
     week: 21, phaseId: 4, label: "Week 21",
     sessions: [
-      { day: "Mon",   title: "Strength reduce volume further",         detail: "Deadlifts 3×4, squats 3×5, bench 3×6 — maintain intensity but trim sets." },
-      { day: "Tue",   title: "Speed race pace sharpening",             detail: "6×1km at race target pace, full 2 min rest, fast but controlled." },
-      { day: "Fri",   title: "Race simulation — quality over volume",  detail: "Full doubles format, push harder on running legs — beat your Week 19 simulation time." },
-      { day: "Bonus", title: "Zone 2 run (optional)",                  detail: "60 min easy." },
+      {
+        day: "Mon", title: "Strength — volume reduces, intensity holds",
+        mobility: "Taper phase — freshness matters, don't add anything new.",
+        detail: "Deadlift 3×4 @ 132kg, Squat 3×5 @ 90kg, Bench 3×6 @ 76kg, Pull-ups 2×max.",
+      },
+      {
+        day: "Tue", title: "Speed 6×1km at race target pace",
+        detail: "Full 2 min rest. Fast but controlled. If these feel hard take an extra rest day before Friday.",
+      },
+      {
+        day: "Fri", title: "Hyrox quality over volume",
+        detail: "Full doubles format — push harder on running legs specifically. Beat your Week 19 simulation time. Last big race simulation.",
+        altSession: "6×1km run at race pace, 6×4 min ski erg or row. Push on the runs specifically.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "60 min easy." },
     ],
   },
   {
     week: 22, phaseId: 4, label: "Week 22",
     sessions: [
-      { day: "Mon",   title: "Strength maintain pattern",     detail: "Same as Week 21: deadlifts 3×4, squats 3×5, bench 3×6." },
-      { day: "Tue",   title: "Speed 500m repeats",            detail: "10×500m at 3:40/km, 60 sec rest — short, fast, sharp; top-end speed maintenance." },
-      { day: "Fri",   title: "Race simulation — half format", detail: "4km and 4 stations only, higher intensity than full format." },
-      { day: "Bonus", title: "Zone 2 run (optional)",         detail: "55 min easy." },
+      {
+        day: "Mon", title: "Strength — same as Week 21",
+        mobility: "Keep the routine — your body knows this pattern now.",
+        detail: "Deadlift 3×4 @ 132kg, Squat 3×5 @ 90kg, Bench 3×6 @ 76kg.",
+      },
+      {
+        day: "Tue", title: "Speed 10×500m at 3:40/km",
+        detail: "60 sec rest. Short fast sharp — top-end speed maintenance.",
+      },
+      {
+        day: "Fri", title: "Hyrox half format — higher intensity",
+        detail: "4km and 4 stations only. Higher intensity than full format. Last full Hyrox session before taper deepens.",
+        altSession: "4×1km run at race pace, 4×5 min ski erg or row. Push hard on each effort.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "55 min easy." },
     ],
   },
   {
     week: 23, phaseId: 4, label: "Week 23 — Taper Begins",
     sessions: [
-      { day: "Mon", title: "Strength light",         detail: "Deadlifts 3×3, squats 3×4, bench 2×6 — low volume, moderate weight." },
-      { day: "Tue", title: "Speed short and fast",   detail: "6×400m at 3:30/km, full rest between — fast, fresh, sharp." },
-      { day: "Fri", title: "Light race rehearsal",   detail: "2km run and 2 stations repeated twice, race pace only." },
+      {
+        day: "Mon", title: "Strength light",
+        mobility: "Extended 15 min: taper week — use extra time on mobility, your legs will thank you on race day.",
+        detail: "Deadlift 3×3 @ 120kg, Squat 3×4 @ 85kg, Bench 2×6 @ 70kg.",
+      },
+      {
+        day: "Tue", title: "Speed 6×400m at 3:30/km",
+        detail: "Full rest between. Fast fresh sharp — keep the fast-twitch fibres firing.",
+      },
+      {
+        day: "Fri", title: "Light race rehearsal",
+        detail: "2km run and 2 stations repeated twice at race pace. Legs should feel good — let them.",
+        altSession: "2×2km run at race pace, 2×5 min ski erg at race effort.",
+      },
     ],
   },
   {
     week: 24, phaseId: 4, label: "Week 24",
     sessions: [
-      { day: "Mon", title: "Strength very light",         detail: "Squats 2×5, deadlifts 2×4, bench 2×5 — just moving weight." },
-      { day: "Tue", title: "Speed 4×1km race pace",       detail: "Full rest between — should feel easy." },
-      { day: "Fri", title: "Easy movement session",       detail: "30 min light run and station technique work, no intensity." },
+      {
+        day: "Mon", title: "Strength very light",
+        mobility: "Keep the habit — it's kept you injury-free across 24 weeks, don't stop now.",
+        detail: "Squat 2×5 @ 80kg, Deadlift 2×4 @ 110kg, Bench 2×5 @ 65kg.",
+      },
+      {
+        day: "Tue", title: "Speed 4×1km at race pace",
+        detail: "Full rest. Should feel easy and controlled. If it doesn't, take an extra rest day — freshness is everything now.",
+      },
+      {
+        day: "Fri", title: "Easy movement session",
+        detail: "30 min light run and station technique at low intensity. Stay loose.",
+        altSession: "30 min easy run, 2×8 min ski erg at 60% effort.",
+      },
     ],
   },
   {
     week: 25, phaseId: 4, label: "Week 25 — Race Week Prep",
     sessions: [
-      { day: "Mon", title: "Very light movement",     detail: "20 min easy jog, bodyweight squats and lunges only." },
-      { day: "Tue", title: "Race preview run",        detail: "2×1km at race pace, full rest — then done." },
-      { day: "Fri", title: "Rest or very easy walk",  detail: "Full rest if race is Sunday; light 20 min walk only if Saturday." },
+      { day: "Mon", title: "Very light movement only", detail: "20 min easy jog, bodyweight squats and lunges. Legs up when not moving." },
+      { day: "Tue", title: "Race preview — 2×1km at race pace", detail: "Full rest between. Remind your legs what fast feels like. Then done — no heroics." },
+      { day: "Fri", title: "Rest or 20 min easy walk", detail: "Full rest if race is Sunday. Check all gear. Confirm race plan with partner. Sleep well." },
     ],
   },
   {
     week: 26, phaseId: 4, label: "Week 26 — Race Week",
     sessions: [
-      { day: "Mon",     title: "Rest",                            detail: "Full rest. Hydrate well, eat well, visualise your race, trust 26 weeks of work." },
-      { day: "Tue",     title: "Very light shakeout",             detail: "20 min easy jog only, a few strides at race pace, nothing more." },
-      { day: "Fri",     title: "Race day prep",                   detail: "Rest Friday. Check gear, confirm race plan with partner." },
-      { day: "Race",    title: "Hyrox Doubles Dublin",            detail: "Target sub-55 minutes. Run your race, trust your partner, enjoy it." },
+      { day: "Mon",  title: "Full rest", detail: "Hydrate well. Eat well. Visualise your race. Trust 26 weeks of work." },
+      { day: "Tue",  title: "Very light shakeout", detail: "20 min easy jog, a few strides at race pace. Nothing more." },
+      { day: "Fri",  title: "Rest and gear check day", detail: "Lay out all kit. Confirm bib, shoes, race plan with partner. Early night." },
+      {
+        day: "Race", title: "Hyrox Doubles Dublin (mid November)",
+        detail: "Target sub-55 minutes. Start controlled. Trust your running — it has transformed over 26 weeks. Your partner is a stronger runner — let them lead the pace. Your stations are your strength — be clinical. Enjoy every second of it.",
+      },
     ],
   },
 ];
@@ -778,7 +1142,7 @@ function renderWeek(week) {
     <span class="week-chev">▶</span>
     <span class="week-title">
       ${week.label}
-      <small>Phase ${week.phaseId}</small>
+      <small><span class="week-date">${weekStartLabel(week.week)}</span> · Phase ${week.phaseId}</small>
     </span>
     ${isCurrent ? '<span class="week-now">Now</span>' : ""}
     <span class="week-count">${doneCount}/${total}</span>
@@ -822,11 +1186,23 @@ function renderSession(week, i, session) {
 
   const main = document.createElement("div");
   main.className = "session-main";
-  main.innerHTML = `
-    <div class="session-day">${session.day}</div>
-    <div class="session-title">${session.title}</div>
-    <div class="session-detail">${session.detail}</div>
-  `;
+  const parts = [
+    `<div class="session-day">${session.day}</div>`,
+    `<div class="session-title">${session.title}</div>`,
+  ];
+  if (session.mobility) {
+    parts.push(`<div class="session-block session-mobility"><strong>Mobility · 10 min</strong>${session.mobility}</div>`);
+  }
+  if (session.detail) {
+    parts.push(`<div class="session-detail">${session.detail}</div>`);
+  }
+  if (session.coachNote) {
+    parts.push(`<div class="session-block session-coach"><strong>Coach note</strong>${session.coachNote}</div>`);
+  }
+  if (session.altSession) {
+    parts.push(`<details class="session-alt"><summary>Alternative — no Hyrox gym</summary><div class="session-alt-body">${session.altSession}</div></details>`);
+  }
+  main.innerHTML = parts.join("");
 
   const notes = document.createElement("textarea");
   notes.className = "session-notes";
