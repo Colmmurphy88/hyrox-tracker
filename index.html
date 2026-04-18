@@ -457,6 +457,195 @@
     --phase-soft: var(--accent-soft);
   }
 
+  /* Race countdown banner */
+  .countdown {
+    background: #000;
+    color: var(--accent);
+    padding: 16px 14px;
+    text-align: center;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    margin: 14px 0 6px;
+    box-shadow: 0 0 24px rgba(245, 196, 0, 0.12);
+  }
+  .countdown-days {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .countdown-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .countdown-date {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-top: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Metrics section */
+  .metrics {
+    display: grid;
+    gap: 12px;
+    margin: 14px 0 22px;
+  }
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+  }
+  .metric-title {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin: 0 0 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .metric-title .metric-sub {
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+
+  /* Chart SVG */
+  .chart {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: #000;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .chart-line {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .chart-dot { fill: var(--accent); }
+  .chart-ref {
+    stroke: var(--accent);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+    opacity: 0.45;
+  }
+  .chart-label,
+  .chart-tick {
+    fill: var(--muted);
+    font-size: 9px;
+    font-family: inherit;
+    font-weight: 600;
+  }
+  .chart-ref-label {
+    fill: var(--accent);
+    font-size: 9px;
+    font-family: inherit;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+  .chart-empty {
+    fill: var(--muted);
+    font-size: 11px;
+    text-anchor: middle;
+    font-family: inherit;
+    font-weight: 600;
+  }
+  .chart-point-label {
+    fill: var(--accent);
+    font-size: 9px;
+    font-family: inherit;
+    font-weight: 800;
+    text-anchor: middle;
+  }
+
+  /* Per-week body weight input */
+  .week-weight {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+  }
+  .week-weight-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    flex: 1;
+  }
+  .week-weight input {
+    width: 80px;
+    padding: 6px 10px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    background: var(--bg);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    text-align: right;
+  }
+  .week-weight input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+  .week-weight .unit {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  /* Session effort rating */
+  .session-rating {
+    display: flex;
+    gap: 1px;
+    margin-top: 6px;
+    align-items: center;
+  }
+  .session-rating .rating-label {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-right: 6px;
+  }
+  .session-rating button {
+    background: transparent;
+    border: 0;
+    padding: 2px 3px;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    color: #3a3a3a;
+    transition: color 0.15s, transform 0.1s;
+  }
+  .session-rating button.filled { color: var(--accent); }
+  .session-rating button:hover { color: var(--accent); }
+  .session-rating button:active { transform: scale(0.9); }
+
   @media (min-width: 560px) {
     .container { padding: 20px 20px 60px; }
     h1 { font-size: 26px; }
@@ -466,6 +655,8 @@
 </head>
 <body>
 <div class="container">
+  <div class="countdown" id="countdown" role="status" aria-live="polite"></div>
+
   <header class="app-header">
     <h1>Hyrox 26-Week Tracker</h1>
     <p class="subtitle" id="subtitle">Start 21 Apr 2026 · Hyrox Doubles Dublin</p>
@@ -475,6 +666,8 @@
       <span class="progress-pct" id="overallPct">0%</span>
     </div>
   </header>
+
+  <section class="metrics" id="metrics"></section>
 
   <main id="phases"></main>
 
@@ -1046,24 +1239,76 @@ function buildPlan() {
 const PLAN = buildPlan();
 
 // --- storage ---------------------------------------------------
+const EMPTY_STATE = () => ({ done: {}, notes: {}, tt: {}, weight: {}, rating: {} });
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { done: {}, notes: {}, tt: {} };
+    if (!raw) return EMPTY_STATE();
     const parsed = JSON.parse(raw);
     return {
-      done: parsed.done || {},
-      notes: parsed.notes || {},
-      tt: parsed.tt || {},
+      done:   parsed.done   || {},
+      notes:  parsed.notes  || {},
+      tt:     parsed.tt     || {},
+      weight: parsed.weight || {},
+      rating: parsed.rating || {},
     };
   } catch {
-    return { done: {}, notes: {}, tt: {} };
+    return EMPTY_STATE();
   }
 }
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 const state = loadState();
+
+// --- race countdown --------------------------------------------
+const RACE_DATE = new Date(2026, 10, 14); // 14 November 2026 (Saturday)
+function daysToRace() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const race = new Date(RACE_DATE);
+  race.setHours(0, 0, 0, 0);
+  return Math.round((race - today) / (1000 * 60 * 60 * 24));
+}
+function renderCountdown() {
+  const el = document.getElementById("countdown");
+  if (!el) return;
+  const days = daysToRace();
+  let headline, label;
+  if (days > 1) {
+    headline = days;
+    label = "Days to race";
+  } else if (days === 1) {
+    headline = "1";
+    label = "Day to go";
+  } else if (days === 0) {
+    headline = "RACE";
+    label = "It's today — go get it";
+  } else {
+    headline = Math.abs(days);
+    label = `Days since race`;
+  }
+  el.innerHTML = `
+    <div class="countdown-days">${headline}</div>
+    <div class="countdown-label">${label}</div>
+    <div class="countdown-date">Sat 14 Nov 2026 · Hyrox Doubles Dublin</div>
+  `;
+}
+
+// --- time helpers ----------------------------------------------
+function ttToSeconds(s) {
+  if (!s) return null;
+  const m = /^(\d{1,2}):(\d{2})$/.exec(s.trim());
+  if (!m) return null;
+  const mm = parseInt(m[1], 10), ss = parseInt(m[2], 10);
+  if (ss >= 60) return null;
+  return mm * 60 + ss;
+}
+function secondsToTt(sec) {
+  const mm = Math.floor(sec / 60);
+  const ss = Math.round(sec % 60);
+  return `${mm}:${ss.toString().padStart(2, "0")}`;
+}
 
 // --- current week ----------------------------------------------
 function currentWeekNumber() {
@@ -1080,6 +1325,142 @@ const CURRENT_WEEK = currentWeekNumber();
 // --- keys ------------------------------------------------------
 const sessKey = (w, i) => `w${w}s${i}`;
 const ttKey = w => `tt${w}`;
+const weightKey = w => `w${w}`;
+
+// --- SVG charts ------------------------------------------------
+function renderBenchmarkChart() {
+  const weeks = [5, 10, 18, 26];
+  const yMin = 210, yMax = 270;           // 3:30 → 4:30 seconds
+  const target = 225;                     // 3:45
+  const W = 400, H = 180;
+  const pad = { l: 40, r: 14, t: 14, b: 30 };
+
+  const xFor = i => pad.l + (i / (weeks.length - 1)) * (W - pad.l - pad.r);
+  const yFor = sec => pad.t + ((yMax - sec) / (yMax - yMin)) * (H - pad.t - pad.b);
+
+  const pts = weeks.map((wk, i) => {
+    const sec = ttToSeconds(state.tt[ttKey(wk)]);
+    if (sec == null) return null;
+    const clamped = Math.max(yMin, Math.min(yMax, sec));
+    return { i, wk, sec, x: xFor(i), y: yFor(clamped) };
+  }).filter(Boolean);
+
+  const polyline = pts.length > 1
+    ? `<polyline class="chart-line" points="${pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ")}" />`
+    : "";
+  const dots = pts.map(p =>
+    `<circle class="chart-dot" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5" />
+     <text class="chart-point-label" x="${p.x.toFixed(1)}" y="${(p.y - 8).toFixed(1)}">${secondsToTt(p.sec)}</text>`
+  ).join("");
+
+  const xLabels = weeks.map((wk, i) =>
+    `<text class="chart-tick" x="${xFor(i).toFixed(1)}" y="${H - 10}" text-anchor="middle">W${wk}</text>`
+  ).join("");
+
+  const yTicks = [yMax, target, yMin];
+  const yLabels = yTicks.map(sec => {
+    const y = yFor(sec);
+    return `<text class="chart-tick" x="${pad.l - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end">${secondsToTt(sec)}</text>`;
+  }).join("");
+
+  const refY = yFor(target);
+  const refLine = `<line class="chart-ref" x1="${pad.l}" y1="${refY.toFixed(1)}" x2="${W - pad.r}" y2="${refY.toFixed(1)}" />
+    <text class="chart-ref-label" x="${W - pad.r - 4}" y="${(refY - 4).toFixed(1)}" text-anchor="end">TARGET 3:45</text>`;
+
+  const empty = pts.length === 0
+    ? `<text class="chart-empty" x="${W/2}" y="${H/2 + 4}">Log your 1km times on weeks 5 / 10 / 18 / 26</text>`
+    : "";
+
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="1km time trial trend">
+    ${refLine}
+    ${polyline}
+    ${dots}
+    ${xLabels}
+    ${yLabels}
+    ${empty}
+  </svg>`;
+}
+
+function renderWeightChart() {
+  const weeks = [];
+  for (let w = 1; w <= 26; w++) weeks.push(w);
+
+  const values = Object.values(state.weight).map(Number).filter(v => !isNaN(v));
+  const hasData = values.length > 0;
+  const dataMin = hasData ? Math.min(...values, 95) : 95;
+  const dataMax = hasData ? Math.max(...values, 95) : 95;
+  const yMin = Math.floor((dataMin - 3) / 5) * 5;
+  const yMax = Math.ceil((dataMax + 3) / 5) * 5;
+  const yRange = Math.max(10, yMax - yMin);
+  const target = 95;
+
+  const W = 800, H = 200;
+  const pad = { l: 36, r: 14, t: 14, b: 30 };
+
+  const xFor = wk => pad.l + ((wk - 1) / 25) * (W - pad.l - pad.r);
+  const yFor = v => pad.t + ((yMax - v) / yRange) * (H - pad.t - pad.b);
+
+  const pts = weeks.map(wk => {
+    const raw = state.weight[weightKey(wk)];
+    const v = raw !== undefined && raw !== "" ? Number(raw) : null;
+    if (v == null || isNaN(v)) return null;
+    return { wk, v, x: xFor(wk), y: yFor(v) };
+  }).filter(Boolean);
+
+  const polyline = pts.length > 1
+    ? `<polyline class="chart-line" points="${pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ")}" />`
+    : "";
+  const dots = pts.map(p =>
+    `<circle class="chart-dot" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3" />`
+  ).join("");
+
+  const xTickWeeks = [1, 5, 10, 15, 20, 26];
+  const xLabels = xTickWeeks.map(wk =>
+    `<text class="chart-tick" x="${xFor(wk).toFixed(1)}" y="${H - 10}" text-anchor="middle">W${wk}</text>`
+  ).join("");
+
+  // Y ticks every 5kg
+  const yTicks = [];
+  for (let v = yMin; v <= yMax; v += 5) yTicks.push(v);
+  const yLabels = yTicks.map(v => {
+    const y = yFor(v);
+    return `<text class="chart-tick" x="${pad.l - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end">${v}</text>`;
+  }).join("");
+
+  const refY = yFor(target);
+  const refLine = `<line class="chart-ref" x1="${pad.l}" y1="${refY.toFixed(1)}" x2="${W - pad.r}" y2="${refY.toFixed(1)}" />
+    <text class="chart-ref-label" x="${W - pad.r - 4}" y="${(refY - 4).toFixed(1)}" text-anchor="end">TARGET 95KG</text>`;
+
+  const empty = pts.length === 0
+    ? `<text class="chart-empty" x="${W/2}" y="${H/2 + 4}">Log your weekly body weight to see the trend</text>`
+    : "";
+
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Weekly body weight trend">
+    ${refLine}
+    ${polyline}
+    ${dots}
+    ${xLabels}
+    ${yLabels}
+    ${empty}
+  </svg>`;
+}
+
+function renderMetrics() {
+  const el = document.getElementById("metrics");
+  if (!el) return;
+  const ttCount = [5, 10, 18, 26].filter(w => ttToSeconds(state.tt[ttKey(w)]) != null).length;
+  const weightCount = Object.keys(state.weight).filter(k => state.weight[k] !== "" && state.weight[k] != null).length;
+  el.innerHTML = `
+    <div class="metric-card">
+      <div class="metric-title">1km Benchmark <span class="metric-sub">${ttCount}/4 logged</span></div>
+      ${renderBenchmarkChart()}
+    </div>
+    <div class="metric-card">
+      <div class="metric-title">Body weight <span class="metric-sub">${weightCount}/26 logged</span></div>
+      ${renderWeightChart()}
+    </div>
+  `;
+}
 
 // --- rendering -------------------------------------------------
 function render() {
@@ -1153,6 +1534,8 @@ function renderWeek(week) {
   const body = document.createElement("div");
   body.className = "week-body";
 
+  body.appendChild(renderWeekWeight(week.week));
+
   week.sessions.forEach((s, i) => body.appendChild(renderSession(week.week, i, s)));
 
   if (TIME_TRIAL_WEEKS.has(week.week)) {
@@ -1161,6 +1544,33 @@ function renderWeek(week) {
 
   el.appendChild(body);
   return el;
+}
+
+function renderWeekWeight(week) {
+  const key = weightKey(week);
+  const wrap = document.createElement("div");
+  wrap.className = "week-weight";
+  const label = document.createElement("span");
+  label.className = "week-weight-label";
+  label.textContent = "Body weight";
+  const input = document.createElement("input");
+  input.type = "number";
+  input.inputMode = "decimal";
+  input.step = "0.1";
+  input.min = "40";
+  input.max = "200";
+  input.placeholder = "kg";
+  input.value = state.weight[key] ?? "";
+  input.addEventListener("input", () => {
+    const v = input.value.trim();
+    if (v) state.weight[key] = v;
+    else delete state.weight[key];
+    saveState();
+    renderMetrics();
+  });
+  wrap.appendChild(label);
+  wrap.appendChild(input);
+  return wrap;
 }
 
 function renderSession(week, i, session) {
@@ -1216,6 +1626,35 @@ function renderSession(week, i, session) {
   });
   main.appendChild(notes);
 
+  const rating = document.createElement("div");
+  rating.className = "session-rating";
+  rating.setAttribute("role", "radiogroup");
+  rating.setAttribute("aria-label", "Session effort rating");
+  const rLabel = document.createElement("span");
+  rLabel.className = "rating-label";
+  rLabel.textContent = "Effort";
+  rating.appendChild(rLabel);
+  const current = Number(state.rating[key]) || 0;
+  for (let n = 1; n <= 5; n++) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-label", `${n} star${n === 1 ? "" : "s"}`);
+    btn.setAttribute("aria-checked", current === n ? "true" : "false");
+    btn.textContent = n <= current ? "\u2605" : "\u2606";
+    if (n <= current) btn.classList.add("filled");
+    btn.addEventListener("click", () => {
+      const prev = Number(state.rating[key]) || 0;
+      const next = prev === n ? 0 : n;
+      if (next) state.rating[key] = next;
+      else delete state.rating[key];
+      saveState();
+      render();
+    });
+    rating.appendChild(btn);
+  }
+  main.appendChild(rating);
+
   wrap.appendChild(check);
   wrap.appendChild(main);
   return wrap;
@@ -1238,6 +1677,7 @@ function renderTimeTrial(week) {
     if (v) state.tt[key] = v;
     else delete state.tt[key];
     saveState();
+    renderMetrics();
   });
   wrap.appendChild(input);
   return wrap;
@@ -1258,16 +1698,23 @@ function updateOverall() {
 
 // --- reset -----------------------------------------------------
 document.getElementById("resetBtn").addEventListener("click", () => {
-  if (!confirm("Reset all completed sessions, notes and time trials?")) return;
+  if (!confirm("Reset all completed sessions, notes, time trials, weights and ratings?")) return;
   localStorage.removeItem(STORAGE_KEY);
   state.done = {};
   state.notes = {};
   state.tt = {};
+  state.weight = {};
+  state.rating = {};
   render();
+  renderMetrics();
+  renderCountdown();
 });
 
 // --- boot ------------------------------------------------------
+renderCountdown();
 render();
+renderMetrics();
+setInterval(renderCountdown, 60 * 60 * 1000);
 
 // Scroll current week into view on load
 requestAnimationFrame(() => {
