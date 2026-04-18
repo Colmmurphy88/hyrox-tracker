@@ -1,0 +1,903 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0f172a" />
+<title>Hyrox 26-Week Tracker</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface-2: #334155;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #334155;
+    --done: #64748b;
+
+    --p1: #3b82f6;
+    --p1-soft: rgba(59, 130, 246, 0.12);
+    --p2: #22c55e;
+    --p2-soft: rgba(34, 197, 94, 0.12);
+    --p3: #f59e0b;
+    --p3-soft: rgba(245, 158, 11, 0.12);
+    --p4: #ef4444;
+    --p4-soft: rgba(239, 68, 68, 0.12);
+
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-2: #f1f5f9;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --done: #94a3b8;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right)
+             env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 16px 14px 48px;
+  }
+
+  header.app-header {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding: 12px 0 10px;
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 12px;
+  }
+
+  /* Progress bar */
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2px;
+  }
+  .progress-label {
+    font-size: 12px;
+    color: var(--muted);
+    min-width: 62px;
+  }
+  .progress-bar {
+    flex: 1;
+    background: var(--surface-2);
+    height: 8px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--p1), var(--p2), var(--p3), var(--p4));
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .progress-pct {
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    min-width: 38px;
+    text-align: right;
+    font-weight: 600;
+  }
+
+  /* Phase groups */
+  .phase {
+    margin-bottom: 28px;
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    border-left: 4px solid var(--phase-color, var(--border));
+    background: var(--phase-soft, var(--surface));
+  }
+  .phase-title {
+    font-size: 15px;
+    font-weight: 700;
+    flex: 1;
+    min-width: 0;
+  }
+  .phase-title small {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .phase-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .phase-progress .progress-bar {
+    width: 70px;
+    height: 6px;
+  }
+  .phase-progress .progress-fill {
+    background: var(--phase-color, var(--p1));
+  }
+  .phase-pct {
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+    min-width: 32px;
+    text-align: right;
+  }
+
+  /* Week card */
+  .week {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border-left: 3px solid var(--phase-color, var(--border));
+  }
+  .week.current {
+    outline: 2px solid var(--phase-color, var(--p1));
+    outline-offset: 2px;
+  }
+
+  .week-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    user-select: none;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+  }
+  .week-header:hover { background: var(--surface-2); }
+  .week-chev {
+    font-size: 12px;
+    color: var(--muted);
+    transition: transform 0.2s;
+    width: 12px;
+    flex-shrink: 0;
+  }
+  .week.open .week-chev { transform: rotate(90deg); }
+  .week-title {
+    font-size: 14px;
+    font-weight: 600;
+    flex: 1;
+    min-width: 0;
+  }
+  .week-title small {
+    display: block;
+    color: var(--muted);
+    font-weight: 400;
+    font-size: 11px;
+    margin-top: 1px;
+  }
+  .week-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--phase-color, var(--p1));
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+  }
+  .week-now {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--text);
+    color: var(--bg);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .week-count {
+    font-size: 11px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+
+  .week-body {
+    display: none;
+    padding: 4px 14px 14px;
+    border-top: 1px solid var(--border);
+  }
+  .week.open .week-body { display: block; }
+
+  /* Session */
+  .session {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .session:last-child { border-bottom: 0; }
+
+  .session-check {
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .session-check input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--phase-color, var(--p1));
+    cursor: pointer;
+  }
+
+  .session-main { flex: 1; min-width: 0; }
+  .session-day {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .session-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 2px 0 2px;
+  }
+  .session-detail {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .session-notes {
+    margin-top: 8px;
+    width: 100%;
+    min-height: 34px;
+    resize: vertical;
+    padding: 6px 8px;
+    font: inherit;
+    font-size: 12px;
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .session-notes:focus {
+    outline: 2px solid var(--phase-color, var(--p1));
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+
+  .session.done .session-title,
+  .session.done .session-detail {
+    color: var(--done);
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+  }
+
+  /* Time trial */
+  .time-trial {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: var(--phase-soft, var(--surface-2));
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--phase-color, var(--border));
+  }
+  .time-trial-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--phase-color, var(--text));
+    display: block;
+    margin-bottom: 6px;
+  }
+  .time-trial input {
+    font: inherit;
+    font-size: 16px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    padding: 6px 10px;
+    width: 100px;
+    text-align: center;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .time-trial input:focus {
+    outline: 2px solid var(--phase-color, var(--p1));
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+
+  /* Reset button */
+  .footer-actions {
+    text-align: center;
+    margin-top: 24px;
+  }
+  .btn-reset {
+    font: inherit;
+    font-size: 12px;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 14px;
+    cursor: pointer;
+  }
+  .btn-reset:hover { color: var(--text); }
+
+  /* Phase color classes */
+  .phase-1 { --phase-color: var(--p1); --phase-soft: var(--p1-soft); }
+  .phase-2 { --phase-color: var(--p2); --phase-soft: var(--p2-soft); }
+  .phase-3 { --phase-color: var(--p3); --phase-soft: var(--p3-soft); }
+  .phase-4 { --phase-color: var(--p4); --phase-soft: var(--p4-soft); }
+
+  @media (min-width: 560px) {
+    .container { padding: 20px 20px 60px; }
+    h1 { font-size: 24px; }
+    .week-title { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="app-header">
+    <h1>Hyrox 26-Week Tracker</h1>
+    <p class="subtitle" id="subtitle">Start 18 Apr 2026 · Hyrox Doubles Dublin</p>
+    <div class="progress">
+      <span class="progress-label">Overall</span>
+      <div class="progress-bar"><div class="progress-fill" id="overallFill"></div></div>
+      <span class="progress-pct" id="overallPct">0%</span>
+    </div>
+  </header>
+
+  <main id="phases"></main>
+
+  <div class="footer-actions">
+    <button class="btn-reset" id="resetBtn" type="button">Reset all data</button>
+  </div>
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   Hyrox 26-Week Tracker — app shell with placeholder data.
+   Real session content will be populated in a later pass.
+--------------------------------------------------------------- */
+
+const START_DATE = new Date(2026, 3, 18); // 18 April 2026 (month is 0-indexed)
+const STORAGE_KEY = "hyrox-tracker-v1";
+
+const PHASES = [
+  { id: 1, name: "Foundation & Speed Mechanics", weeks: [1, 6] },
+  { id: 2, name: "Race Simulation & Threshold",  weeks: [7, 14] },
+  { id: 3, name: "Intensity & Specificity",      weeks: [15, 20] },
+  { id: 4, name: "Sharpening & Taper",           weeks: [21, 26] },
+];
+
+const TIME_TRIAL_WEEKS = new Set([5, 10, 18, 26]);
+
+// Real plan data — Phases 1 & 2 populated. Phases 3 & 4 remain placeholder until supplied.
+const REAL_WEEKS = [
+  // -------- Phase 1 — Foundation & Speed Mechanics --------
+  {
+    week: 1, phaseId: 1, label: "Week 1",
+    sessions: [
+      { day: "Mon",   title: "Strength full body baseline", detail: "Squats 4×8, deadlifts 4×6, bench press 3×10, bent-over row 3×10, farmer carry 3×30m." },
+      { day: "Tue",   title: "Speed 600m repeats",          detail: "Warm up 10 min, 6×600m at 3:50/km, 90 sec rest, cool down 10 min." },
+      { day: "Fri",   title: "HIIT Hyrox station work",     detail: "50 min, ski erg, sled push, burpee broad jumps, wall balls, short rest intervals." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "45–50 min easy conversational pace, heart rate 130–145." },
+    ],
+  },
+  {
+    week: 2, phaseId: 1, label: "Week 2",
+    sessions: [
+      { day: "Mon",   title: "Strength lower body focus",   detail: "Squats 4×8, Romanian deadlifts 4×10, walking lunges 3×12, sled push 4×20m heavy." },
+      { day: "Tue",   title: "Speed 600m repeats",          detail: "Warm up 10 min, 7×600m at 3:50/km, 90 sec rest, focus on consistent splits." },
+      { day: "Fri",   title: "HIIT Hyrox station work",     detail: "50 min, row, sandbag lunges, wall balls, ski erg, minimal rest between stations." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "50 min easy, focus on nasal breathing." },
+    ],
+  },
+  {
+    week: 3, phaseId: 1, label: "Week 3",
+    sessions: [
+      { day: "Mon",   title: "Strength full body",          detail: "Deadlifts 4×6 heavier, bench press 4×8, pull-ups 3×max, box jumps 3×8, plank holds." },
+      { day: "Tue",   title: "Speed mixed 400/800m",        detail: "4×400m at 3:40/km then 3×800m at 3:55/km, 2 min rest between each." },
+      { day: "Fri",   title: "HIIT Hyrox station work",     detail: "50 min, add 200m run between each station block to simulate race structure." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "55 min easy, keep it genuinely easy." },
+    ],
+  },
+  {
+    week: 4, phaseId: 1, label: "Week 4 — Deload",
+    sessions: [
+      { day: "Mon", title: "Strength reduced volume", detail: "Squats 3×6, deadlifts 3×5, bench 3×8, same weights fewer sets, stop before failure." },
+      { day: "Tue", title: "Easy run and strides",    detail: "30 min Zone 2 then 4×100m strides at fast but relaxed pace, full recovery between." },
+      { day: "Fri", title: "Light HIIT",              detail: "35 min, lower intensity, focus on movement quality, ski erg, row, wall balls only." },
+    ],
+  },
+  {
+    week: 5, phaseId: 1, label: "Week 5 — Benchmark",
+    sessions: [
+      { day: "Mon",   title: "Strength full body heavier",         detail: "Deadlifts 5×5 heavy, squats 4×8, bench 4×8, single leg work, farmer carry 4×30m." },
+      { day: "Tue",   title: "Speed 800m repeats + time trial",    detail: "Warm up 10 min, 5×800m at 3:55/km, 2 min rest, 1km time trial at end." },
+      { day: "Fri",   title: "HIIT Hyrox circuit",                 detail: "50 min, full circuit with runs between, push quality not just completion." },
+      { day: "Bonus", title: "Zone 2 run (optional)",              detail: "55 min easy." },
+    ],
+  },
+  {
+    week: 6, phaseId: 1, label: "Week 6",
+    sessions: [
+      { day: "Mon",   title: "Strength full body",          detail: "Squats 4×8, deadlifts 4×6, bench 4×8, pull-ups, lunges. Note your weights — next block goes heavier." },
+      { day: "Tue",   title: "Speed threshold run",         detail: "20 min warm up, then 20 min sustained at 4:10/km pace, 10 min cool down." },
+      { day: "Fri",   title: "HIIT Hyrox simulation intro", detail: "Run 500m, station, run 500m, station, 4 rounds — first taste of combined format." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "60 min easy." },
+    ],
+  },
+
+  // -------- Phase 2 — Race Simulation & Threshold --------
+  {
+    week: 7, phaseId: 2, label: "Week 7",
+    sessions: [
+      { day: "Mon",   title: "Strength power focus",        detail: "Deadlifts 5×5 heavy, box jumps 4×6, sled push 4×20m, pull-ups 4×max." },
+      { day: "Tue",   title: "Speed 1km repeats begin",     detail: "5×1km at 4:00/km target, 2 min rest — this is your race pace." },
+      { day: "Fri",   title: "Race simulation — 4 rounds",  detail: "1km run, ski erg 1 min, 1km run, sled push 20m, full rest between rounds." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "60 min easy." },
+    ],
+  },
+  {
+    week: 8, phaseId: 2, label: "Week 8",
+    sessions: [
+      { day: "Mon",   title: "Strength full body",          detail: "Squats 5×5 heavy, Romanian deadlifts 4×8, bench 4×8, bent-over row 4×10, farmer carry." },
+      { day: "Tue",   title: "Speed 1km repeats",           detail: "6×1km at 4:00/km, 90 sec rest (shorter than last week), note if pace holds." },
+      { day: "Fri",   title: "Race simulation — 5 rounds",  detail: "1km run, station, 1km run, station — add wall balls and row this week." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "60 min easy." },
+    ],
+  },
+  {
+    week: 9, phaseId: 2, label: "Week 9",
+    sessions: [
+      { day: "Mon",   title: "Strength lower body heavy",   detail: "Squats 5×5 max effort, walking lunges 4×12 weighted, sled push 5×20m, calf raises." },
+      { day: "Tue",   title: "Speed threshold intervals",   detail: "3×2km at 4:05/km pace, 3 min rest — sustaining speed is the goal." },
+      { day: "Fri",   title: "Race simulation — tired legs", detail: "Do 15 min of burpee broad jumps and squats before starting, then 4 rounds of run and station." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "60 min easy." },
+    ],
+  },
+  {
+    week: 10, phaseId: 2, label: "Week 10 — Deload & Benchmark",
+    sessions: [
+      { day: "Mon", title: "Strength reduced volume",       detail: "Squats 3×6, deadlifts 3×5, bench 3×8 — maintain weight, reduce sets." },
+      { day: "Tue", title: "Easy run + 1km time trial",     detail: "20 min warm up then one fresh 1km all-out. Record your time — this is your Phase 2 benchmark." },
+      { day: "Fri", title: "Light HIIT",                    detail: "35 min, low intensity, focus on form across all Hyrox stations." },
+    ],
+  },
+  {
+    week: 11, phaseId: 2, label: "Week 11",
+    sessions: [
+      { day: "Mon",   title: "Strength full body push",     detail: "Deadlifts 5×5 heavy, bench 4×8, pull-ups 4×max, sled push 4×20m, box jumps 3×8." },
+      { day: "Tue",   title: "Speed 1km repeats — sub 4:00", detail: "6×1km targeting 3:55/km, 90 sec rest — first attempt at breaking your barrier pace." },
+      { day: "Fri",   title: "Race simulation — 6 rounds",  detail: "1km and station repeated 6 times, rotate through all Hyrox stations." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "65 min easy." },
+    ],
+  },
+  {
+    week: 12, phaseId: 2, label: "Week 12",
+    sessions: [
+      { day: "Mon",   title: "Strength full body",          detail: "Squats 5×6, Romanian deadlifts 4×8, bench 4×8, rows 4×10, farmer carry 4×40m." },
+      { day: "Tue",   title: "Speed 2km threshold",         detail: "4×2km at 4:05/km, 2.5 min rest — lungs should be working hard but pace must hold." },
+      { day: "Fri",   title: "Race simulation — full half", detail: "4km total running with 4 stations — closest to doubles race format yet." },
+      { day: "Bonus", title: "Zone 2 run (optional)",       detail: "65 min easy." },
+    ],
+  },
+  {
+    week: 13, phaseId: 2, label: "Week 13",
+    sessions: [
+      { day: "Mon",   title: "Strength power and explosivity",     detail: "Deadlifts 3×3 max, box jumps 5×5, sled push 5×20m heavy, sandbag carries 4×20m." },
+      { day: "Tue",   title: "Speed mixed session",                detail: "2×2km at 4:05 then 4×500m at 3:40/km — trains both endurance and top-end speed." },
+      { day: "Fri",   title: "Race simulation — tired legs",       detail: "Pre-fatigue 20 min with squats, lunges, step-ups, then full 4km and 4 stations." },
+      { day: "Bonus", title: "Zone 2 run (optional)",              detail: "65 min easy." },
+    ],
+  },
+  {
+    week: 14, phaseId: 2, label: "Week 14 — Deload",
+    sessions: [
+      { day: "Mon", title: "Strength reduced",      detail: "3 sets each main lift, lower weight, focus on clean form." },
+      { day: "Tue", title: "Zone 2 run",            detail: "45 min easy, active recovery only, no speed work this week." },
+      { day: "Fri", title: "Light Hyrox skills",    detail: "35 min, station technique only — wall ball form, ski erg efficiency, sled push posture." },
+    ],
+  },
+
+  // -------- Phase 3 — Intensity & Specificity --------
+  {
+    week: 15, phaseId: 3, label: "Week 15",
+    sessions: [
+      { day: "Mon",   title: "Strength maintain not build",          detail: "Deadlifts 4×5, squats 4×6, bench 3×8, pull-ups 3×max — weights stay high but volume reduces." },
+      { day: "Tue",   title: "Speed 1km repeats at 3:50",            detail: "7×1km targeting 3:50/km, 90 sec rest — this should now feel like your new normal pace." },
+      { day: "Fri",   title: "Full Hyrox simulation — doubles",      detail: "8km total running, all 8 stations, split effort as you would with your partner, time yourself." },
+      { day: "Bonus", title: "Zone 2 run (optional)",                detail: "65 min easy." },
+    ],
+  },
+  {
+    week: 16, phaseId: 3, label: "Week 16",
+    sessions: [
+      { day: "Mon",   title: "Strength maintain",              detail: "Squats 4×6, Romanian deadlifts 4×8, bench 3×8, sled push 4×20m, farmer carry." },
+      { day: "Tue",   title: "Speed 3km tempo",                detail: "2×3km at 4:10/km, 3 min rest — sustained race pace effort, focus on breathing pattern." },
+      { day: "Fri",   title: "Race simulation — full & timed", detail: "Complete doubles format, record splits per km and per station." },
+      { day: "Bonus", title: "Zone 2 run (optional)",          detail: "70 min easy." },
+    ],
+  },
+  {
+    week: 17, phaseId: 3, label: "Week 17",
+    sessions: [
+      { day: "Mon",   title: "Strength maintain",              detail: "Deadlifts 4×5, box jumps 3×6, bench 3×8, rows 3×10." },
+      { day: "Tue",   title: "Speed 1km sub 3:50 push",        detail: "8×1km at 3:48–3:50/km, 90 sec rest — this is a hard session." },
+      { day: "Fri",   title: "Race simulation — pre-fatigued", detail: "20 min heavy station work then full 8km and 8 stations." },
+      { day: "Bonus", title: "Zone 2 run (optional)",          detail: "70 min easy." },
+    ],
+  },
+  {
+    week: 18, phaseId: 3, label: "Week 18 — Deload & Benchmark",
+    sessions: [
+      { day: "Mon", title: "Strength reduced",     detail: "3 sets per exercise, moderate weight, no new PBs this week." },
+      { day: "Tue", title: "1km time trial",       detail: "Full warm up then one all-out 1km — this is your Phase 3 benchmark, compare to Week 10." },
+      { day: "Fri", title: "Light Hyrox skills",   detail: "40 min technique and efficiency focus, no racing the clock." },
+    ],
+  },
+  {
+    week: 19, phaseId: 3, label: "Week 19",
+    sessions: [
+      { day: "Mon",   title: "Strength maintain",               detail: "Deadlifts 4×5, squats 4×6, bench 3×8, pull-ups 3×max, sandbag lunges 3×10." },
+      { day: "Tue",   title: "Speed race pace ladder",          detail: "500m at 3:40 → 1km at 3:50 → 2km at 4:00 → 1km at 3:50 → 500m at 3:40, full rest between." },
+      { day: "Fri",   title: "Full race simulation — timed",    detail: "Full doubles format, target a personal best simulation time." },
+      { day: "Bonus", title: "Zone 2 run (optional)",           detail: "70 min easy." },
+    ],
+  },
+  {
+    week: 20, phaseId: 3, label: "Week 20",
+    sessions: [
+      { day: "Mon",   title: "Strength maintain",                     detail: "Same as Week 19: deadlifts 4×5, squats 4×6, bench 3×8, pull-ups 3×max, sandbag lunges 3×10." },
+      { day: "Tue",   title: "Speed 2km repeats",                     detail: "4×2km at 4:00/km, 2 min rest — sustained race pace for longer than race distance." },
+      { day: "Fri",   title: "Race simulation — station efficiency",  detail: "Full format focusing on clean handoffs and minimising dead time." },
+      { day: "Bonus", title: "Zone 2 run (optional)",                 detail: "70 min easy." },
+    ],
+  },
+
+  // -------- Phase 4 — Sharpening & Taper --------
+  {
+    week: 21, phaseId: 4, label: "Week 21",
+    sessions: [
+      { day: "Mon",   title: "Strength reduce volume further",         detail: "Deadlifts 3×4, squats 3×5, bench 3×6 — maintain intensity but trim sets." },
+      { day: "Tue",   title: "Speed race pace sharpening",             detail: "6×1km at race target pace, full 2 min rest, fast but controlled." },
+      { day: "Fri",   title: "Race simulation — quality over volume",  detail: "Full doubles format, push harder on running legs — beat your Week 19 simulation time." },
+      { day: "Bonus", title: "Zone 2 run (optional)",                  detail: "60 min easy." },
+    ],
+  },
+  {
+    week: 22, phaseId: 4, label: "Week 22",
+    sessions: [
+      { day: "Mon",   title: "Strength maintain pattern",     detail: "Same as Week 21: deadlifts 3×4, squats 3×5, bench 3×6." },
+      { day: "Tue",   title: "Speed 500m repeats",            detail: "10×500m at 3:40/km, 60 sec rest — short, fast, sharp; top-end speed maintenance." },
+      { day: "Fri",   title: "Race simulation — half format", detail: "4km and 4 stations only, higher intensity than full format." },
+      { day: "Bonus", title: "Zone 2 run (optional)",         detail: "55 min easy." },
+    ],
+  },
+  {
+    week: 23, phaseId: 4, label: "Week 23 — Taper Begins",
+    sessions: [
+      { day: "Mon", title: "Strength light",         detail: "Deadlifts 3×3, squats 3×4, bench 2×6 — low volume, moderate weight." },
+      { day: "Tue", title: "Speed short and fast",   detail: "6×400m at 3:30/km, full rest between — fast, fresh, sharp." },
+      { day: "Fri", title: "Light race rehearsal",   detail: "2km run and 2 stations repeated twice, race pace only." },
+    ],
+  },
+  {
+    week: 24, phaseId: 4, label: "Week 24",
+    sessions: [
+      { day: "Mon", title: "Strength very light",         detail: "Squats 2×5, deadlifts 2×4, bench 2×5 — just moving weight." },
+      { day: "Tue", title: "Speed 4×1km race pace",       detail: "Full rest between — should feel easy." },
+      { day: "Fri", title: "Easy movement session",       detail: "30 min light run and station technique work, no intensity." },
+    ],
+  },
+  {
+    week: 25, phaseId: 4, label: "Week 25 — Race Week Prep",
+    sessions: [
+      { day: "Mon", title: "Very light movement",     detail: "20 min easy jog, bodyweight squats and lunges only." },
+      { day: "Tue", title: "Race preview run",        detail: "2×1km at race pace, full rest — then done." },
+      { day: "Fri", title: "Rest or very easy walk",  detail: "Full rest if race is Sunday; light 20 min walk only if Saturday." },
+    ],
+  },
+  {
+    week: 26, phaseId: 4, label: "Week 26 — Race Week",
+    sessions: [
+      { day: "Mon",     title: "Rest",                            detail: "Full rest. Hydrate well, eat well, visualise your race, trust 26 weeks of work." },
+      { day: "Tue",     title: "Very light shakeout",             detail: "20 min easy jog only, a few strides at race pace, nothing more." },
+      { day: "Fri",     title: "Race day prep",                   detail: "Rest Friday. Check gear, confirm race plan with partner." },
+      { day: "Race",    title: "Hyrox Doubles Dublin",            detail: "Target sub-55 minutes. Run your race, trust your partner, enjoy it." },
+    ],
+  },
+];
+
+function buildPlan() {
+  const byWeek = new Map(REAL_WEEKS.map(w => [w.week, w]));
+  const plan = [];
+  for (let w = 1; w <= 26; w++) {
+    if (byWeek.has(w)) {
+      plan.push(byWeek.get(w));
+      continue;
+    }
+    const phase = PHASES.find(p => w >= p.weeks[0] && w <= p.weeks[1]);
+    plan.push({
+      week: w,
+      phaseId: phase.id,
+      label: `Week ${w} — placeholder`,
+      sessions: [
+        { day: "Mon", title: "Session A", detail: "Placeholder — strength block." },
+        { day: "Tue", title: "Session B", detail: "Placeholder — speed block." },
+        { day: "Fri", title: "Session C", detail: "Placeholder — Hyrox / HIIT block." },
+      ],
+    });
+  }
+  return plan;
+}
+
+const PLAN = buildPlan();
+
+// --- storage ---------------------------------------------------
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return { done: {}, notes: {}, tt: {} };
+    const parsed = JSON.parse(raw);
+    return {
+      done: parsed.done || {},
+      notes: parsed.notes || {},
+      tt: parsed.tt || {},
+    };
+  } catch {
+    return { done: {}, notes: {}, tt: {} };
+  }
+}
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+const state = loadState();
+
+// --- current week ----------------------------------------------
+function currentWeekNumber() {
+  const now = new Date();
+  const ms = now - START_DATE;
+  const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+  const w = Math.floor(days / 7) + 1;
+  if (w < 1) return 1;
+  if (w > 26) return 26;
+  return w;
+}
+const CURRENT_WEEK = currentWeekNumber();
+
+// --- keys ------------------------------------------------------
+const sessKey = (w, i) => `w${w}s${i}`;
+const ttKey = w => `tt${w}`;
+
+// --- rendering -------------------------------------------------
+function render() {
+  const root = document.getElementById("phases");
+  root.innerHTML = "";
+
+  for (const phase of PHASES) {
+    const phaseEl = document.createElement("section");
+    phaseEl.className = `phase phase-${phase.id}`;
+
+    const weeksInPhase = PLAN.filter(w => w.phaseId === phase.id);
+    const { done, total } = phaseStats(weeksInPhase);
+    const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+
+    phaseEl.innerHTML = `
+      <div class="phase-header">
+        <div class="phase-title">
+          Phase ${phase.id} — ${phase.name}
+          <small>Weeks ${phase.weeks[0]}–${phase.weeks[1]}</small>
+        </div>
+        <div class="phase-progress">
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+          <span class="phase-pct">${pct}%</span>
+        </div>
+      </div>
+    `;
+
+    for (const week of weeksInPhase) {
+      phaseEl.appendChild(renderWeek(week));
+    }
+    root.appendChild(phaseEl);
+  }
+  updateOverall();
+}
+
+function phaseStats(weeks) {
+  let done = 0, total = 0;
+  for (const w of weeks) {
+    for (let i = 0; i < w.sessions.length; i++) {
+      total++;
+      if (state.done[sessKey(w.week, i)]) done++;
+    }
+  }
+  return { done, total };
+}
+
+function renderWeek(week) {
+  const el = document.createElement("article");
+  el.className = `week phase-${week.phaseId}`;
+  const isCurrent = week.week === CURRENT_WEEK;
+  if (isCurrent) el.classList.add("current", "open");
+
+  const doneCount = week.sessions.filter((_, i) => state.done[sessKey(week.week, i)]).length;
+  const total = week.sessions.length;
+
+  const header = document.createElement("button");
+  header.type = "button";
+  header.className = "week-header";
+  header.innerHTML = `
+    <span class="week-chev">▶</span>
+    <span class="week-title">
+      ${week.label}
+      <small>Phase ${week.phaseId}</small>
+    </span>
+    ${isCurrent ? '<span class="week-now">Now</span>' : ""}
+    <span class="week-count">${doneCount}/${total}</span>
+  `;
+  header.addEventListener("click", () => el.classList.toggle("open"));
+  el.appendChild(header);
+
+  const body = document.createElement("div");
+  body.className = "week-body";
+
+  week.sessions.forEach((s, i) => body.appendChild(renderSession(week.week, i, s)));
+
+  if (TIME_TRIAL_WEEKS.has(week.week)) {
+    body.appendChild(renderTimeTrial(week.week));
+  }
+
+  el.appendChild(body);
+  return el;
+}
+
+function renderSession(week, i, session) {
+  const key = sessKey(week, i);
+  const done = !!state.done[key];
+
+  const wrap = document.createElement("div");
+  wrap.className = "session" + (done ? " done" : "");
+
+  const check = document.createElement("label");
+  check.className = "session-check";
+  const cb = document.createElement("input");
+  cb.type = "checkbox";
+  cb.checked = done;
+  cb.setAttribute("aria-label", `Mark ${session.day} ${session.title} complete`);
+  cb.addEventListener("change", () => {
+    if (cb.checked) state.done[key] = true;
+    else delete state.done[key];
+    saveState();
+    render();
+  });
+  check.appendChild(cb);
+
+  const main = document.createElement("div");
+  main.className = "session-main";
+  main.innerHTML = `
+    <div class="session-day">${session.day}</div>
+    <div class="session-title">${session.title}</div>
+    <div class="session-detail">${session.detail}</div>
+  `;
+
+  const notes = document.createElement("textarea");
+  notes.className = "session-notes";
+  notes.placeholder = "Notes — pace, felt like, fuel, weights…";
+  notes.value = state.notes[key] || "";
+  notes.addEventListener("input", () => {
+    const v = notes.value;
+    if (v) state.notes[key] = v;
+    else delete state.notes[key];
+    saveState();
+  });
+  main.appendChild(notes);
+
+  wrap.appendChild(check);
+  wrap.appendChild(main);
+  return wrap;
+}
+
+function renderTimeTrial(week) {
+  const key = ttKey(week);
+  const wrap = document.createElement("div");
+  wrap.className = "time-trial";
+  wrap.innerHTML = `<span class="time-trial-label">1km time trial</span>`;
+  const input = document.createElement("input");
+  input.type = "text";
+  input.inputMode = "numeric";
+  input.pattern = "[0-9]{1,2}:[0-9]{2}";
+  input.placeholder = "mm:ss";
+  input.maxLength = 5;
+  input.value = state.tt[key] || "";
+  input.addEventListener("input", () => {
+    const v = input.value.trim();
+    if (v) state.tt[key] = v;
+    else delete state.tt[key];
+    saveState();
+  });
+  wrap.appendChild(input);
+  return wrap;
+}
+
+function updateOverall() {
+  let done = 0, total = 0;
+  for (const w of PLAN) {
+    for (let i = 0; i < w.sessions.length; i++) {
+      total++;
+      if (state.done[sessKey(w.week, i)]) done++;
+    }
+  }
+  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+  document.getElementById("overallFill").style.width = pct + "%";
+  document.getElementById("overallPct").textContent = pct + "%";
+}
+
+// --- reset -----------------------------------------------------
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (!confirm("Reset all completed sessions, notes and time trials?")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state.done = {};
+  state.notes = {};
+  state.tt = {};
+  render();
+});
+
+// --- boot ------------------------------------------------------
+render();
+
+// Scroll current week into view on load
+requestAnimationFrame(() => {
+  const cur = document.querySelector(".week.current");
+  if (cur) cur.scrollIntoView({ block: "center", behavior: "instant" in document.documentElement.style ? "instant" : "auto" });
+});
+</script>
+</body>
+</html>
