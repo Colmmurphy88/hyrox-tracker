@@ -678,7 +678,7 @@
 
 <script>
 /* ---------------------------------------------------------------
-   Hyrox 26-Week Tracker — app shell with placeholder data.
+   Hyrox 30-Week Tracker — app shell with placeholder data.
    Real session content will be populated in a later pass.
 --------------------------------------------------------------- */
 
@@ -694,11 +694,11 @@ const STORAGE_KEY = "hyrox-tracker-v1";
 const PHASES = [
   { id: 1, name: "Foundation & Speed Mechanics", weeks: [1, 6] },
   { id: 2, name: "Race Simulation & Threshold",  weeks: [7, 14] },
-  { id: 3, name: "Intensity & Specificity",      weeks: [15, 20] },
-  { id: 4, name: "Sharpening & Taper",           weeks: [21, 26] },
+  { id: 3, name: "Intensity & Specificity",      weeks: [15, 24] },
+  { id: 4, name: "Sharpening & Taper",           weeks: [25, 30] },
 ];
 
-const TIME_TRIAL_WEEKS = new Set([5, 10, 18, 26]);
+const TIME_TRIAL_WEEKS = new Set([5, 10, 18, 24]);
 
 // Real plan data — full refined 26-week plan with mobility, weights, coach notes and alt sessions.
 const REAL_WEEKS = [
@@ -1062,7 +1062,7 @@ const REAL_WEEKS = [
       {
         day: "Tue", title: "1km time trial (Benchmark 3)",
         detail: "Full warm up then one all-out 1km. Compare to Weeks 5 and 10. You should be approaching or under 3:50 by now.",
-        coachNote: "Pace target progression: Week 5 target 4:00, Week 10 target 3:55, Week 18 target 3:48, Week 26 target 3:45.",
+        coachNote: "Pace target progression: Week 5 target 4:00, Week 10 target 3:55, Week 18 target 3:48, Week 24 target 3:45.",
       },
       {
         day: "Fri", title: "Light Hyrox technique and efficiency",
@@ -1111,10 +1111,93 @@ const REAL_WEEKS = [
       { day: "Bonus", title: "Zone 2 run (optional)", detail: "70 min easy." },
     ],
   },
+  {
+    week: 21, phaseId: 3, label: "Week 21",
+    sessions: [
+      {
+        day: "Mon", title: "Strength maintain",
+        mobility: "Standard routine. You're deep into the plan now — positions should feel natural.",
+        detail: "Deadlift 4×5 @ 132kg, Squat 4×6 @ 90kg, Bench 3×8 @ 76kg, Pull-ups 3×max, Sandbag lunges 3×10.",
+      },
+      {
+        day: "Tue", title: "Speed 8×1km at 3:45–3:48/km",
+        detail: "90 sec rest. This is your sharpest speed session yet. You're roughly 8 weeks from race day — this pace should start feeling like race pace.",
+        coachNote: "If you hit the wall on rep 6 or 7 extend rest to 2 min for the final reps. Pace over volume always.",
+      },
+      {
+        day: "Fri", title: "Hyrox full doubles simulation — timed",
+        detail: "8km total running, all 8 stations. Go for a personal best simulation time. Record every km split and every station time.",
+        altSession: "8×1km run at 3:48/km alternating with 8×4 min ski erg or row. Push hard — personal best attempt.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "70 min easy." },
+    ],
+  },
+  {
+    week: 22, phaseId: 3, label: "Week 22",
+    sessions: [
+      {
+        day: "Mon", title: "Strength maintain",
+        mobility: "Shoulder check — band pull-aparts 3×15 before bench. You're carrying fatigue at this stage — protect the shoulder.",
+        detail: "Deadlift 4×5 @ 132kg, Squat 4×6 @ 90kg, Bench 3×8 @ 76kg, Rows 3×10 @ 68kg, Farmer carry 4×40m @ 42kg per hand.",
+      },
+      {
+        day: "Tue", title: "Speed race pace ladder — final version",
+        detail: "500m at 3:35/km, 1km at 3:45/km, 2km at 3:55/km, 1km at 3:45/km, 500m at 3:35/km. Full rest between each. Your fastest ladder session of the entire plan — everything you've built is showing here.",
+      },
+      {
+        day: "Fri", title: "Hyrox pre-fatigued full simulation",
+        detail: "20 min heavy station work first then full 8km and 8 stations. Final pre-fatigued session before taper begins. Race-uncomfortable by design.",
+        altSession: "Pre-fatigue 20 min ski erg intervals at 85% effort. Then 8×1km run at 3:50/km, 8×4 min row. 60 sec rest between efforts.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "70 min easy." },
+    ],
+  },
+  {
+    week: 23, phaseId: 3, label: "Week 23 — Final Hard Week",
+    sessions: [
+      {
+        day: "Mon", title: "Strength — final heavy session",
+        mobility: "Full routine. This is your last genuinely hard strength session — make it count but don't leave yourself wrecked.",
+        detail: "Deadlift 4×5 @ 135kg, Squat 4×6 @ 92kg, Bench 3×8 @ 78kg, Pull-ups 3×max, Box jumps 3×6.",
+        coachNote: "These are your peak working weights across the entire 30 weeks. Don't push beyond these numbers — the goal now is to arrive at race day strong and fresh, not to set new PBs in the gym.",
+      },
+      {
+        day: "Tue", title: "Speed 6×1km at 3:45/km",
+        detail: "Full 2 min rest. Sharp and controlled. These should feel fast but not desperate — you've earned this pace over 23 weeks.",
+      },
+      {
+        day: "Fri", title: "Hyrox final full race simulation",
+        detail: "Full doubles format, all 8 stations, 8km running. This is your last full dress rehearsal before taper. Go for your best simulation time of the entire plan. Record everything — km splits, station times, total time. Use this session to finalise your race strategy with your partner.",
+        altSession: "8×1km run at 3:47/km alternating with 8×4 min ski erg or row. Final personal best attempt.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "65 min easy. Enjoy it — last long easy run before race week." },
+    ],
+  },
+  {
+    week: 24, phaseId: 3, label: "Week 24 — Benchmark 4 & Taper Bridge",
+    sessions: [
+      {
+        day: "Mon", title: "Strength — volume drops sharply",
+        mobility: "Extended to 15 min this week — taper bridge, use the extra time. Full hip, ankle, shoulder routine.",
+        detail: "Deadlift 3×3 @ 120kg, Squat 3×4 @ 85kg, Bench 2×6 @ 70kg.",
+        coachNote: "Weights drop but don't disappear — you're maintaining the neural pattern, not building new stimulus. Stop well before failure on every set.",
+      },
+      {
+        day: "Tue", title: "Speed 6×400m at 3:30/km",
+        detail: "Full rest between. Fast, fresh, sharp. Keep the fast-twitch fibres firing going into the final taper weeks. No endurance grind this week.",
+      },
+      {
+        day: "Fri", title: "Light race rehearsal",
+        detail: "2km run and 2 stations repeated twice at race pace. Legs should feel good — let them. This is the bridge into the final taper. Save the max effort for the 1km benchmark TT.",
+        altSession: "2×2km run at race pace, 2×5 min ski erg at race effort. Done.",
+      },
+      { day: "Bonus", title: "Zone 2 run (optional)", detail: "55 min easy. Keep it genuinely easy — you're protecting freshness now." },
+    ],
+  },
 
   // -------- Phase 4 — Sharpening & Taper --------
   {
-    week: 21, phaseId: 4, label: "Week 21",
+    week: 25, phaseId: 4, label: "Week 25",
     sessions: [
       {
         day: "Mon", title: "Strength — volume reduces, intensity holds",
@@ -1127,17 +1210,17 @@ const REAL_WEEKS = [
       },
       {
         day: "Fri", title: "Hyrox quality over volume",
-        detail: "Full doubles format — push harder on running legs specifically. Beat your Week 19 simulation time. Last big race simulation.",
+        detail: "Full doubles format — push harder on running legs specifically. Beat your Week 23 simulation time. Last big race simulation.",
         altSession: "6×1km run at race pace, 6×4 min ski erg or row. Push on the runs specifically.",
       },
       { day: "Bonus", title: "Zone 2 run (optional)", detail: "60 min easy." },
     ],
   },
   {
-    week: 22, phaseId: 4, label: "Week 22",
+    week: 26, phaseId: 4, label: "Week 26",
     sessions: [
       {
-        day: "Mon", title: "Strength — same as Week 21",
+        day: "Mon", title: "Strength — same as Week 25",
         mobility: "Keep the routine — your body knows this pattern now.",
         detail: "Deadlift 3×4 @ 132kg, Squat 3×5 @ 90kg, Bench 3×6 @ 76kg.",
       },
@@ -1154,7 +1237,7 @@ const REAL_WEEKS = [
     ],
   },
   {
-    week: 23, phaseId: 4, label: "Week 23 — Taper Begins",
+    week: 27, phaseId: 4, label: "Week 27 — Taper Begins",
     sessions: [
       {
         day: "Mon", title: "Strength light",
@@ -1173,11 +1256,11 @@ const REAL_WEEKS = [
     ],
   },
   {
-    week: 24, phaseId: 4, label: "Week 24",
+    week: 28, phaseId: 4, label: "Week 28",
     sessions: [
       {
         day: "Mon", title: "Strength very light",
-        mobility: "Keep the habit — it's kept you injury-free across 24 weeks, don't stop now.",
+        mobility: "Keep the habit — it's kept you injury-free across 28 weeks, don't stop now.",
         detail: "Squat 2×5 @ 80kg, Deadlift 2×4 @ 110kg, Bench 2×5 @ 65kg.",
       },
       {
@@ -1192,7 +1275,7 @@ const REAL_WEEKS = [
     ],
   },
   {
-    week: 25, phaseId: 4, label: "Week 25 — Race Week Prep",
+    week: 29, phaseId: 4, label: "Week 29 — Race Week Prep",
     sessions: [
       { day: "Mon", title: "Very light movement only", detail: "20 min easy jog, bodyweight squats and lunges. Legs up when not moving." },
       { day: "Tue", title: "Race preview — 2×1km at race pace", detail: "Full rest between. Remind your legs what fast feels like. Then done — no heroics." },
@@ -1200,14 +1283,14 @@ const REAL_WEEKS = [
     ],
   },
   {
-    week: 26, phaseId: 4, label: "Week 26 — Race Week",
+    week: 30, phaseId: 4, label: "Week 30 — Race Week",
     sessions: [
-      { day: "Mon",  title: "Full rest", detail: "Hydrate well. Eat well. Visualise your race. Trust 26 weeks of work." },
+      { day: "Mon",  title: "Full rest", detail: "Hydrate well. Eat well. Visualise your race. Trust 30 weeks of work." },
       { day: "Tue",  title: "Very light shakeout", detail: "20 min easy jog, a few strides at race pace. Nothing more." },
-      { day: "Fri",  title: "Rest and gear check day", detail: "Lay out all kit. Confirm bib, shoes, race plan with partner. Early night." },
+      { day: "Thu",  title: "Rest and gear check day", detail: "Lay out all kit. Confirm bib, shoes, race plan with partner. Early night." },
       {
-        day: "Race", title: "Hyrox Doubles Dublin (mid November)",
-        detail: "Target sub-55 minutes. Start controlled. Trust your running — it has transformed over 26 weeks. Your partner is a stronger runner — let them lead the pace. Your stations are your strength — be clinical. Enjoy every second of it.",
+        day: "Race", title: "Hyrox Doubles Dublin — 18 November",
+        detail: "Target sub-55 minutes. Start controlled. Trust your running — it has transformed over 30 weeks. Your partner is a stronger runner — let them lead the pace. Your stations are your strength — be clinical. Enjoy every second of it.",
       },
     ],
   },
@@ -1216,7 +1299,7 @@ const REAL_WEEKS = [
 function buildPlan() {
   const byWeek = new Map(REAL_WEEKS.map(w => [w.week, w]));
   const plan = [];
-  for (let w = 1; w <= 26; w++) {
+  for (let w = 1; w <= 30; w++) {
     if (byWeek.has(w)) {
       plan.push(byWeek.get(w));
       continue;
@@ -1262,7 +1345,7 @@ function saveState() {
 const state = loadState();
 
 // --- race countdown --------------------------------------------
-const RACE_DATE = new Date(2026, 10, 14); // 14 November 2026 (Saturday)
+const RACE_DATE = new Date(2026, 10, 18); // 18 November 2026
 function daysToRace() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -1291,7 +1374,7 @@ function renderCountdown() {
   el.innerHTML = `
     <div class="countdown-days">${headline}</div>
     <div class="countdown-label">${label}</div>
-    <div class="countdown-date">Sat 14 Nov 2026 · Hyrox Doubles Dublin</div>
+    <div class="countdown-date">Wed 18 Nov 2026 · Hyrox Doubles Dublin</div>
   `;
 }
 
@@ -1317,7 +1400,7 @@ function currentWeekNumber() {
   const days = Math.floor(ms / (1000 * 60 * 60 * 24));
   const w = Math.floor(days / 7) + 1;
   if (w < 1) return 1;
-  if (w > 26) return 26;
+  if (w > 30) return 30;
   return w;
 }
 const CURRENT_WEEK = currentWeekNumber();
@@ -1329,7 +1412,7 @@ const weightKey = w => `w${w}`;
 
 // --- SVG charts ------------------------------------------------
 function renderBenchmarkChart() {
-  const weeks = [5, 10, 18, 26];
+  const weeks = [5, 10, 18, 24];
   const yMin = 210, yMax = 270;           // 3:30 → 4:30 seconds
   const target = 225;                     // 3:45
   const W = 400, H = 180;
@@ -1368,7 +1451,7 @@ function renderBenchmarkChart() {
     <text class="chart-ref-label" x="${W - pad.r - 4}" y="${(refY - 4).toFixed(1)}" text-anchor="end">TARGET 3:45</text>`;
 
   const empty = pts.length === 0
-    ? `<text class="chart-empty" x="${W/2}" y="${H/2 + 4}">Log your 1km times on weeks 5 / 10 / 18 / 26</text>`
+    ? `<text class="chart-empty" x="${W/2}" y="${H/2 + 4}">Log your 1km times on weeks 5 / 10 / 18 / 24</text>`
     : "";
 
   return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="1km time trial trend">
@@ -1383,7 +1466,7 @@ function renderBenchmarkChart() {
 
 function renderWeightChart() {
   const weeks = [];
-  for (let w = 1; w <= 26; w++) weeks.push(w);
+  for (let w = 1; w <= 30; w++) weeks.push(w);
 
   const values = Object.values(state.weight).map(Number).filter(v => !isNaN(v));
   const hasData = values.length > 0;
@@ -1397,7 +1480,7 @@ function renderWeightChart() {
   const W = 800, H = 200;
   const pad = { l: 36, r: 14, t: 14, b: 30 };
 
-  const xFor = wk => pad.l + ((wk - 1) / 25) * (W - pad.l - pad.r);
+  const xFor = wk => pad.l + ((wk - 1) / 29) * (W - pad.l - pad.r);
   const yFor = v => pad.t + ((yMax - v) / yRange) * (H - pad.t - pad.b);
 
   const pts = weeks.map(wk => {
@@ -1414,7 +1497,7 @@ function renderWeightChart() {
     `<circle class="chart-dot" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3" />`
   ).join("");
 
-  const xTickWeeks = [1, 5, 10, 15, 20, 26];
+  const xTickWeeks = [1, 5, 10, 15, 20, 25, 30];
   const xLabels = xTickWeeks.map(wk =>
     `<text class="chart-tick" x="${xFor(wk).toFixed(1)}" y="${H - 10}" text-anchor="middle">W${wk}</text>`
   ).join("");
@@ -1448,7 +1531,7 @@ function renderWeightChart() {
 function renderMetrics() {
   const el = document.getElementById("metrics");
   if (!el) return;
-  const ttCount = [5, 10, 18, 26].filter(w => ttToSeconds(state.tt[ttKey(w)]) != null).length;
+  const ttCount = [5, 10, 18, 24].filter(w => ttToSeconds(state.tt[ttKey(w)]) != null).length;
   const weightCount = Object.keys(state.weight).filter(k => state.weight[k] !== "" && state.weight[k] != null).length;
   el.innerHTML = `
     <div class="metric-card">
@@ -1456,7 +1539,7 @@ function renderMetrics() {
       ${renderBenchmarkChart()}
     </div>
     <div class="metric-card">
-      <div class="metric-title">Body weight <span class="metric-sub">${weightCount}/26 logged</span></div>
+      <div class="metric-title">Body weight <span class="metric-sub">${weightCount}/30 logged</span></div>
       ${renderWeightChart()}
     </div>
   `;
